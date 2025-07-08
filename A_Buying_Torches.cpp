@@ -29,7 +29,12 @@ int lcm(int a,int b){ return (a*b)/gcd(a,b);}
 int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vector<vector<int>> dp(n+1, vector<int>(m+1, 0));for(int i = 1; i <= n; i++){for(int j = 1; j <= m; j++){if(a[i-1] == b[j-1]){dp[i][j] = 1 + dp[i-1][j-1];res = max(res, dp[i][j]);}}}return res;}
 
 void solve(){
-    
+    int x,y,k;cin>>x>>y>>k;
+    int j=x-1;
+    int n=(k+(y*k))-x;
+    int a=n/j;
+    if(n%j != 0 && a*j < n) a++;
+    cout<< a + k + 1<<ln;
 }
 
 int32_t main(){
