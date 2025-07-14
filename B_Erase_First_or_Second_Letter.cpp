@@ -29,32 +29,11 @@ int lcm(int a,int b){ return (a*b)/gcd(a,b);}
 int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vector<vector<int>> dp(n+1, vector<int>(m+1, 0));for(int i = 1; i <= n; i++){for(int j = 1; j <= m; j++){if(a[i-1] == b[j-1]){dp[i][j] = 1 + dp[i-1][j-1];res = max(res, dp[i][j]);}}}return res;}
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
-
 void solve(){
-    int a, b; cin >> a >> b;
-    auto check = [&](int a, int b) {
-        return a % b != 0 && b % a != 0;
-    }; 
+    int n; cin >> n;
+    string s; cin >> s;
     int cnt = 0;
-    while (a != b) {
-        if (check(a, b)) {
-            cout << -1 << ln;
-            return;
-        }
-        if (a < b) {
-            if (a * 8 <= b) a *= 8;
-            else if (a * 4 <= b) a *= 4;
-            else if (a * 2 <= b) a *= 2;
-        } else {
-            if (a % 8 == 0 && a / 8 >= b) a /= 8;
-            else if (a % 4 == 0 && a / 4 >= b) a /= 4;
-            else if (a % 2 == 0 && a / 2 >= b) a /= 2;
-            else {
-                cout << -1 << ln;
-                return;
-            }
-        }cnt++;
-    }cout << cnt << ln;
+    
 }
 
 int32_t main(){
