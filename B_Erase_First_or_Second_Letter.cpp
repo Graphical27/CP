@@ -30,10 +30,14 @@ int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vect
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(){
-    int n; cin >> n;
-    string s; cin >> s;
-    int cnt = 0;
-    
+    int n;
+    string s; cin >> n >> s;
+    int ans = 0;
+    set<char> st;
+    for (char x : s){
+        st.insert(x);
+        ans += st.size();
+    }cout << ans << ln;
 }
 
 int32_t main(){
