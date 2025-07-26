@@ -29,21 +29,72 @@ int lcm(int a,int b){ return (a*b)/gcd(a,b);}
 int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vector<vector<int>> dp(n+1, vector<int>(m+1, 0));for(int i = 1; i <= n; i++){for(int j = 1; j <= m; j++){if(a[i-1] == b[j-1]){dp[i][j] = 1 + dp[i-1][j-1];res = max(res, dp[i][j]);}}}return res;}
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
+// void solve(){
+//     int n, x; cin >> n >> x;
+//     vector<int> v(n);
+//     for (auto &i : v) cin >> i;
+//     if (n == 1) {
+//         cout << v[0] + x << ln;
+//         return;
+//     }
+//     priority_queue<int, vector<int>, greater<>> pq(v.begin(), v.end());
+//     while (x){
+//         int curr = pq.top();
+//         pq.pop();
+//         pq.push(curr + 1);
+//         x--;
+//     }cout << pq.top() << ln;
+// }
+
+// void solve(){
+//     ll n;
+//     cin >> n;
+//     ll x;
+//     cin>>x;
+//     vector<ll>v(n);
+//     for (int i = 0; i < n; i++) {
+//         cin >> v[i];
+//     }
+ 
+//     ll si = 1, ei = 1e12, ans = -1;
+//     while (si <= ei) {
+//         ll mid = si + (ei - si) / 2;
+//         if(helper(mid,v,x)){
+//             ans=mid;
+//             si=mid+1;
+//         }
+//         else{
+//             ei=mid-1;
+//         }
+//     }
+//     cout<<ans<<endl;
+ 
+// }
+
 void solve() {
     int n, x; cin >> n >> x;
-    vector <int> a(n);
-    for (auto &x : a) cin >> x;
-    int l = 1, r = 2e9;
-    while (l != r){
-        int mid = (l + r + 1) / 2;
-        int ans = 0;
-        for (auto &x : a) ans += max(0LL, mid - x);
-        if (ans <= x) l = mid;
-        else r = mid - 1;
-    }
-    cout << l << "\n";
+    vector<int> v(n);
+    for(auto &i : v) cin >> i;
+    int low = 0, high = 1e12, ans = 0;
+    auto canFill = [&](int h) {
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += max(0LL, (int)h - v[i]);
+            if (sum > x) return false;
+        }
+        return true;
+    };
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (canFill(mid)) {
+            ans = mid;
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }cout << ans << ln;
 }
- 
+
 
 int32_t main(){
     Fast_IO;
