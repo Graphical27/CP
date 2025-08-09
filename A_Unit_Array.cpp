@@ -29,6 +29,9 @@ int lcm(int a,int b){ return (a*b)/gcd(a,b);}
 int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vector<vector<int>> dp(n+1, vector<int>(m+1, 0));for(int i = 1; i <= n; i++){for(int j = 1; j <= m; j++){if(a[i-1] == b[j-1]){dp[i][j] = 1 + dp[i-1][j-1];res = max(res, dp[i][j]);}}}return res;}
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
+
+
+
 void solve(int tc = 0){
     int n,x; cin >> n;
 	vector<int> c(2);
