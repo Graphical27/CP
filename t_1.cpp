@@ -206,36 +206,79 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 // };
 
 
-class Solution{
-	public:
-        TreeNode* target = NULL;
-        void markParent(TreeNode* unordered_map<TreeNode*, TreeNode*> &parent_track,int tar){
-            queue<TreeNode*> q;
-            q.push(root);
-            while(!q.empty()){
-                TreeNode8 current = q.front();
-                q.pop();
-                if(current->left){
-                    parent_track[current->left] = current;
-                    if(root->data == tar) target = root;
-                    q.push(current->left);
-                }if(current->right){
-                    parent_track[current->right] = current;
-                    if(root->data == tar) target = root;
-                    q.push(current->right);
-                }
-            }
-        }
-        
-		int timeToBurnTree(TreeNode* root, int start){
-            unordered_map<TreeNode*, bool> visited;
-            queue<TreeNode*> q;
-            unordered_map<TreeNode*, TreeNode*> parent_track;
-            markParent(root,parent_track,start);
-            q.push(target);
-            visited[target] = true;
-            while(!q.empty()){
+// class Solution {
+// public:
+//     TreeNode* target = NULL;
+//     void markParent(TreeNode* root, unordered_map<TreeNode*, TreeNode*> &parent_track, int tar) {
+//         queue<TreeNode*> q;
+//         q.push(root);
+//         while(!q.empty()){
+//             TreeNode* current = q.front();
+//             q.pop();
+//             if(current->val == tar) target = current;
+//             if(current->left){
+//                 parent_track[current->left] = current;
+//                 q.push(current->left);
+//             }
+//             if(current->right){
+//                 parent_track[current->right] = current;
+//                 q.push(current->right);
+//             }
+//         }
+//     }
 
-            }
-		}	
+//     int timeToBurnTree(TreeNode* root, int start) {
+//         unordered_map<TreeNode*, TreeNode*> parent_track;
+//         markParent(root, parent_track, start);
+
+//         unordered_map<TreeNode*, bool> visited;
+//         queue<TreeNode*> q;
+//         q.push(target);
+//         visited[target] = true;
+
+//         int cnt = 0;
+//         while(!q.empty()){
+//             int size = q.size();
+//             bool burned = false;
+//             for(int i = 0; i < size; i++){
+//                 TreeNode* current = q.front();
+//                 q.pop();
+//                 if(current->left && !visited[current->left]){
+//                     burned = true;
+//                     q.push(current->left);
+//                     visited[current->left] = true;
+//                 }
+//                 if(current->right && !visited[current->right]){
+//                     burned = true;
+//                     q.push(current->right);
+//                     visited[current->right] = true;
+//                 }
+//                 if(parent_track.count(current) && !visited[parent_track[current]]){
+//                     burned = true;
+//                     q.push(parent_track[current]);
+//                     visited[parent_track[current]] = true;
+//                 }
+//             }if(burned) cnt++;
+//         }return cnt;
+//     }
+// };
+
+
+class Solution {
+public:
+    int helper(TreeNode* root){
+        if(!root) return 0;
+        return helper(root->left) + helper(root->right) + 1;
+    }
+    int countNodes(TreeNode* root) { 
+       cout << helper(root);
+    }
+};
+
+
+class Solution{	
+	public:	
+		bool uniqueBinaryTree(int a, int b){
+			return a==b? false: a==2||b==2? true:false;
+		}
 };
