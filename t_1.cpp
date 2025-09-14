@@ -264,21 +264,67 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 // };
 
 
-class Solution {
-public:
-    int helper(TreeNode* root){
-        if(!root) return 0;
-        return helper(root->left) + helper(root->right) + 1;
-    }
-    int countNodes(TreeNode* root) { 
-       cout << helper(root);
-    }
-};
+// class Solution {
+// public:
+//     int helper(TreeNode* root){
+//         if(!root) return 0;
+//         return helper(root->left) + helper(root->right) + 1;
+//     }
+//     int countNodes(TreeNode* root) { 
+//        cout << helper(root);
+//     }
+// };
 
 
-class Solution{	
-	public:	
-		bool uniqueBinaryTree(int a, int b){
-			return a==b? false: a==2||b==2? true:false;
-		}
-};
+// class Solution{	
+// 	public:	
+// 		bool uniqueBinaryTree(int a, int b){
+// 			return a==b? false: a==2||b==2? true:false;
+// 		}
+// };
+
+
+
+// class Solution {
+// public:
+//     TreeNode* buildTreeHelper(vector<int>& preorder, vector<int>& inorder, unordered_map<int, int>& inMap, int preStart, int preEnd, int inStart, int inEnd) {
+//         if (preStart > preEnd || inStart > inEnd) return nullptr;
+//         int rootVal = preorder[preStart];
+//         TreeNode* root = new TreeNode(rootVal);
+//         int inRoot = inMap[rootVal];
+//         int leftSize = inRoot - inStart;
+//         root->left = buildTreeHelper(preorder, inorder, inMap, preStart + 1, preStart + leftSize, inStart, inRoot - 1);
+//         root->right = buildTreeHelper(preorder, inorder, inMap, preStart + leftSize + 1, preEnd, inRoot + 1, inEnd);
+//         return root;
+//     }
+
+//     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+//         unordered_map<int, int> inMap;
+//         for (int i = 0; i < inorder.size(); ++i)
+//             inMap[inorder[i]] = i;
+//         return buildTreeHelper(preorder, inorder, inMap, 0, preorder.size() - 1, 0, inorder.size() - 1);
+//     }
+// };
+
+
+
+// class Solution {
+// public:
+//     TreeNode* buildTreeHelper(vector<int>& inorder, vector<int>& postorder, unordered_map<int, int>& inMap, int inStart, int inEnd, int postStart, int postEnd) {
+//         if (inStart > inEnd || postStart > postEnd) return nullptr;
+//         int rootVal = postorder[postEnd];
+//         TreeNode* root = new TreeNode(rootVal);
+//         int inRoot = inMap[rootVal];
+//         int leftSize = inRoot - inStart;
+//         root->left = buildTreeHelper(inorder, postorder, inMap, inStart, inRoot - 1, postStart, postStart + leftSize - 1);
+//         root->right = buildTreeHelper(inorder, postorder, inMap, inRoot + 1, inEnd, postStart + leftSize, postEnd - 1);
+//         return root;
+//     }
+
+//     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+//         unordered_map<int, int> inMap;
+//         for (int i = 0; i < inorder.size(); ++i)
+//             inMap[inorder[i]] = i;
+//         return buildTreeHelper(inorder, postorder, inMap, 0, inorder.size() - 1, 0, postorder.size() - 1);
+//     }
+// };
