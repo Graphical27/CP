@@ -52,21 +52,21 @@ using namespace std;
 
 
 
-class bfs{
-    vector<int> bfs(vector<vector<int>&adj){
-        int n = adj.size();
+class bfS{
+public:
+    vector<int> bfs(vector<vector<int>> &adj){
         vector<int> ans;
-        vector<int> vis(n,0);
+        vector<bool> vis(adj.size(),false);
         queue<int> q;
-        vis[0] = 1;
         q.push(0);
+        vis[0]=true;
         while(!q.empty()){
-            int node = q.front();
+            int curr=q.front();
             q.pop();
-            ans.push_back(node);
-            for(auto it : adj[node]){
-                if(vis[it]==0){
-                    vis[it]=1;
+            ans.push_back(curr);
+            for(auto it:adj[curr]){
+                if(vis[it]==false){
+                    vis[it]=true;
                     q.push(it);
                 }
             }
@@ -76,7 +76,104 @@ class bfs{
 
 
 class dfs{
-    vector<int> dfs(vector<vector<int>> &adj){
-        
+public:
+    vector<int> vis, ans;
+    void helper(vector<vector<int>> &adj, int current){
+        ans.push_back(current);
+        vis[current] = 1;
+        for(auto it: adj[current]){
+            if(!vis[it]){
+                helper(adj, it);
+            }
+        }
     }
-}
+    vector<int> dfs_traverse(vector<vector<int>> &adj){
+        int n = adj.size();
+        vis.assign(n, 0);
+        ans.clear();
+        helper(adj, 0);
+        return ans;
+    }
+};
+
+            ////// my logic ///// im a dumbooo ///////
+
+
+// class Solution {
+// public:
+//     int helper(vector<vector<int>> &adj, vector<int> &exist){
+//         vector<unordered_set<int>> groups;
+//         int n = adj.size();
+
+//         for(int i = 0; i < n; i++){
+//             for(int j = 0; j < n; j++){
+//                 if(i != j && adj[i][j] == 1){
+//                     if(!exist[i] && !exist[j]){
+//                         groups.push_back({i, j});
+//                         exist[i] = groups.size();
+//                         exist[j] = groups.size();
+//                     } else if(exist[i] && !exist[j]){
+//                         groups[exist[i]-1].insert(j);
+//                         exist[j] = exist[i];
+//                     } else if(!exist[i] && exist[j]){
+//                         groups[exist[j]-1].insert(i);
+//                         exist[i] = exist[j];
+//                     } else if(exist[i] != exist[j]){
+//                         int gi = exist[i]-1;
+//                         int gj = exist[j]-1;
+//                         for(int x : groups[gj]){
+//                             groups[gi].insert(x);
+//                             exist[x] = exist[i];
+//                         }
+//                         groups[gj].clear();
+//                     }
+//                 }
+//             }
+//         }
+
+//         int count = 0;
+//         for(auto &g : groups){
+//             if(!g.empty()) count++;
+//         }
+//         for(int i = 0; i < n; i++){
+//             if(exist[i] == 0) count++;
+//         }
+
+//         return count;
+//     }
+
+//     int findCircleNum(vector<vector<int>>& isConnected) {
+//         ios::sync_with_stdio(false);
+//         cin.tie(0);
+
+//         int n = isConnected.size();
+//         vector<int> exist(n, 0);
+//         return helper(isConnected, exist);
+//     }
+// };
+
+
+
+
+class Solution {
+public:
+    void dfs(int node, vector<vector<int>> &isConnected, vector<bool> &visited) {
+        visited[node] = true;
+        for (int j = 0; j < isConnected.size(); j++) {
+            if (isConnected[node][j] == 1 && !visited[j]) {
+                dfs(j, isConnected, visited);
+            }
+        }
+    }
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n = isConnected.size();
+        vector<bool> visited(n, false);
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                count++;
+                dfs(i, isConnected, visited);
+            }
+        }return count;
+    }
+};
