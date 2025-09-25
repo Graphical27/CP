@@ -177,3 +177,50 @@ public:
         }return count;
     }
 };
+
+
+class Solution {
+public:
+    // int cnt = 0;
+    void helper(vector<vector<int>> &edges,vector<int> &vis,int current){
+        vis[current] = 1;
+        for(auto it:edges[current]){
+            if(!vis[it]){
+                helper(edges,vis,it);
+            }
+        }
+    }
+    int findNumberOfComponent(int V, vector<vector<int>> &edges) {
+        vector<int> vis(edges.size(), 0);
+        int cnt = 0;
+        for(int it = 0; it < edges.size(); it++){
+            if(!vis[it]){
+                cnt++;
+                helper(edges,vis,it);
+            }
+        }
+        return cnt;
+    }
+};
+
+
+class Solution{
+public:
+    int helper(vector<vector<int>> &grid, vector<int> &vis; int current){
+        if(vis[current]) return 0;
+        for(auto it:grid[current]){
+            if()
+            if(!vis[it]){
+                helper(grid,vis,it)
+            }
+        }
+    }
+    int orangesRotting(vector<vector<int>> &grid) {
+       vector<int> vis(grid.size(), 0);
+       for(int i = 0; i < grid.size(); i++){
+            if(!vis[i]){
+                helper(grid,vis,i);
+            }
+       }return cnt;
+    }
+};
