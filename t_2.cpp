@@ -204,23 +204,193 @@ public:
 };
 
 
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> vis(n, vector<int>(m, -1));
+        queue<pair<int, pair<int, int>>> q;
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 2){
+                    q.push({0,{i,j}});
+                    vis[i][j] = 2;
+                }
+            }
+        }
+
+        int ans = 0;
+        int dr[] = {-1,0,1,0};
+        int dc[] = {0,1,0,-1};
+
+        while(!q.empty()){
+            auto front = q.front();
+            q.pop();
+            int time = front.first;
+            int row = front.second.first;
+            int col = front.second.second;
+            ans = max(ans, time);
+
+            for(int k = 0; k < 4; k++){
+                int nr = row + dr[k];
+                int nc = col + dc[k];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < m && grid[nr][nc] == 1 && vis[nr][nc] == -1){
+                    q.push({time+1,{nr,nc}});
+                    vis[nr][nc] = 2;
+                }
+            }
+        }
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 1 && vis[i][j] == -1) return -1;
+            }
+        }
+        return ans;
+    }
+};
+
+
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int n = image.size();
+        int m = image[0].size();
+        vector<vector<int>> vis(n, vector<int>(m, -1));
+        queue<pair<int, pair<int, int>>> q;
+        vector<int> dr = {-1,0,1,0};
+        vector<int> dc = {0,1,0,-1};
+        vector<vector<int>> ans(image.begin(),image.end());
+        ans[sr][sc] = color;
+        q.push({color,{sr,sc}});
+        while(!q.empty()){
+            auto front = q.front();
+            q.pop();
+            int time = front.first;
+            int row = front.second.first;
+            int col = front.second.second;
+            for(int k = 0; k < 4; k++){
+                int nr = row + dr[k];
+                int nc = col + dc[k];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < m && image[nr][nc] == time && vis[nr][nc] == -1){
+                    q.push({time,{nr,nc}});
+                    vis[nr][nc] = time;
+                    ans[nr][nc] = color;
+                }
+            }
+            if(q.empty() && vis[row][col] == -1){
+                break;
+            }
+        } return ans;
+    }
+};
+
+
+
 class Solution{
 public:
-    int helper(vector<vector<int>> &grid, vector<int> &vis; int current){
-        if(vis[current]) return 0;
-        for(auto it:grid[current]){
-            if()
+    bool dfs(int node, vector<int> adj[], vector<int>& vis, vector<int>& parent){
+        vis[node] = 1;
+        for(auto it: adj[node]){
             if(!vis[it]){
-                helper(grid,vis,it)
+                parent[it] = node;
+                if(dfs(it, adj, vis, parent)) return true;
+            }else if(parent[node]!=it){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isCycle(int V, vector<int> adj[]) {
+        vector<int> vis(V, 0), parent(V, -1);
+        for(int i = 0; i < V; i++){
+            if(!vis[i]){
+                if(dfs(i, adj, vis, parent)) return true;
+            }
+        }
+        return false;
+    }
+};
+
+class Solution{
+public:
+    int bfs(vector<vector<int>> &vis,vector<vector<int>> &grid,int i, int j,vector<vector<int>> &ans,queue<pair<int,int>> q){
+        int n = grid.size();
+        int m = grid[0].size();
+        vis[i][j] = 1;
+        for(; i < n; i++){
+            for(; j < m; j++){
+                if(grid[i][j] == 1 && !vis[i][j]){
+                    while(!q.empty()){
+                        auto temp = q.front();
+                        int temp_i = temp.first;
+                        int temp_j = temp.second;
+                        q.pop();
+                        ans[temp_i][temp_j] = abs(temp_i - i) + abs(temp_j - j);
+                    }
+                }else{
+                    if(!vis[i][j]) q.push({i,j});
+                }
             }
         }
     }
-    int orangesRotting(vector<vector<int>> &grid) {
-       vector<int> vis(grid.size(), 0);
-       for(int i = 0; i < grid.size(); i++){
-            if(!vis[i]){
-                helper(grid,vis,i);
+    
+    vector<vector<int>> nearest(vector<vector<int>> grid){
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> vis(n,vector<int>(m,-1));
+        queue<pair<int,int>> q;
+        vector<vector<int>> ans(n,vector<int>(m,-1));
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(!vis[i][m]){
+                    vis[i][m] = 1;
+                    bfs(vis,grid,i,j,ans,q);
+                }
             }
-       }return cnt;
+        }
+    }
+};
+
+///////////// ALSO 
+
+class Solution{
+public:
+    vector<vector<int>> nearest(vector<vector<int>> grid){
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> vis(n,vector<int>(m,0));
+        vector<vector<int>> ans(n,vector<int>(m,0));
+        queue<pair<int,int>> q;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 1){
+                    q.push({i,j});
+                    vis[i][j] = 1;
+                }
+            }
+        }
+        int dr[] = {-1,0,1,0};
+        int dc[] = {0,1,0,-1};
+        while(!q.empty()){
+            auto [r,c] = q.front();
+            q.pop();
+
+            for(int k = 0; k < 4; k++){
+                int nr = r + dr[k];
+                int nc = c + dc[k];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < m && !vis[nr][nc]){
+                    ans[nr][nc] = ans[r][c] + 1;
+                    vis[nr][nc] = 1;
+                    q.push({nr,nc});
+                }
+            }
+        }return ans;
     }
 };
