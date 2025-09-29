@@ -452,3 +452,55 @@ public:
         }
     }
 };
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define FastIO ios::sync_with_stdio(0); cin.tie(0);
+
+class Solution {
+public:
+    void bfs(int r, int c, vector<vector<int>>& grid, int n, int m) {
+        queue<pair<int,int>> q;
+        q.push({r,c});
+        grid[r][c] = 0; // mark visited
+
+        int dr[] = {-1,0,1,0};
+        int dc[] = {0,1,0,-1};
+
+        while(!q.empty()){
+            auto [x,y] = q.front(); q.pop();
+            for(int k = 0; k < 4; k++){
+                int nx = x + dr[k];
+                int ny = y + dc[k];
+                if(nx>=0 && nx<n && ny>=0 && ny<m && grid[nx][ny]==1){
+                    q.push({nx,ny});
+                    grid[nx][ny] = 0;
+                }
+            }
+        }
+    }
+
+    int numEnclaves(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+
+        // remove all 1s connected to border
+        for(int i = 0; i < n; i++){
+            if(grid[i][0]==1) bfs(i,0,grid,n,m);
+            if(grid[i][m-1]==1) bfs(i,m-1,grid,n,m);
+        }
+        for(int j = 0; j < m; j++){
+            if(grid[0][j]==1) bfs(0,j,grid,n,m);
+            if(grid[n-1][j]==1) bfs(n-1,j,grid,n,m);
+        }
+
+        int cnt = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j]==1) cnt++;
+            }
+        }
+        return cnt;
+    }
+};
