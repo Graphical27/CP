@@ -504,3 +504,63 @@ public:
         return cnt;
     }
 };
+
+
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        long long current = 1,maxi = INT_MIN;
+        for(int i = 0; i < nums.size(); i++){
+            current = current*nums[i];
+            maxi = max(maxi,current);
+            if(current == 0){
+                current = 1;
+            }
+        }current = 1;
+        for(int i = nums.size() - 1; i>= 0; i--){
+            current = current*nums[i];
+            maxi = max(maxi,current);
+            if(current == 0){
+                current =  1;
+            }
+        }return maxi;
+    }
+};
+
+
+class Solution {
+public:
+    vector<int> decrypt(vector<int>& code, int k) {
+        int n = code.size();
+        vector<int> ans(n, 0);
+        if(k == 0) return ans;
+
+        vector<int> prefix(2 * n + 1, 0);
+        for(int i = 0; i < 2 * n; i++) 
+            prefix[i + 1] = prefix[i] + code[i % n];
+        for(auto i:prefix){
+            cout << i <<" ";
+        }cout << "\n";
+        for(int i = 0; i < n; i++) {
+            if(k > 0) 
+                ans[i] = prefix[i + k + 1] - prefix[i + 1];
+            else 
+                ans[i] = prefix[i + n] - prefix[i + n + k];
+        }
+        return ans;
+    }
+};
+
+
+// int main(){
+//     Solution s;
+//     vector<int> temp = {5,7,1,4};
+//     vector<int> k = s.decrypt(temp, 3);
+//     for(auto i : k){
+//         cout << i << " ";
+//     }
+//     cout << "\n";
+//     return 0;
+// }
+
+
