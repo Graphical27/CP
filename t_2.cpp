@@ -564,3 +564,23 @@ public:
 // }
 
 
+
+
+
+class Solution {
+public:
+    int minimumRecolors(string blocks, int k) {
+        int n = blocks.size();
+        vector<int> prefix(n, 0);
+        prefix[0] = (blocks[0] == 'B');
+        for(int i = 1; i < n; i++){
+            prefix[i] = prefix[i-1] + (blocks[i] == 'B');
+        }
+        int mini = INT_MAX;
+        for(int i = 0; i <= n - k; i++){
+            int j = i + k - 1;
+            int blacks = prefix[j] - (i > 0 ? prefix[i-1] : 0);
+            mini = min(mini, k - blacks);
+        }return mini;
+    }
+};
