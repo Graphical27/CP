@@ -584,3 +584,50 @@ public:
         }return mini;
     }
 };
+
+
+class Solution {
+public:
+    int numberOfArithmeticSlices(vector<int>& nums) {
+        if(nums.size() < 3) return 0;
+        int cnt = 0, current = 0;
+        for(int i = 2; i < nums.size(); i++){
+            nums[i] - nums[i-1] ==  nums[i-1] - nums[i - 2] ? current++,cnt+=current:current = 0;
+        }return cnt;     
+    }
+};
+
+
+// 1, 2, 3, 4
+// 3 = 1
+// 4 = 3
+// 5 = 6
+// 1, 2, 3, 4, 5, 6
+// 6 =10
+// 1, 2, 3, 4, 5, 6, 7
+// 7 = 15
+// cnt+=lastidx - currentidx -1;
+
+
+
+// Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
+
+// Input: s = "cbaebabacd", p = "abc"
+// Output: [0,6]
+// Explanation:
+// The substring with start index = 0 is "cba", which is an anagram of "abc".
+// The substring with start index = 6 is "bac", which is an anagram of "abc".
+// Example 2:
+// Input: s = "abab", p = "ab"
+// Output: [0,1,2]
+// Explanation:
+// The substring with start index = 0 is "ab", which is an anagram of "ab".
+// The substring with start index = 1 is "ba", which is an anagram of "ab".
+// The substring with start index = 2 is "ab", which is an anagram of "ab".
+
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        
+    }
+};
