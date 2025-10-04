@@ -628,6 +628,39 @@ public:
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        
+        map<char,int> mp;
+        int cnt = 0;
+        int n = p.size();
+        for(int i = 0; i < p.size(); i++){
+            mp[p[i]]++;
+        }for(int i = 0; i < s.size() - n; i++){
+            map<char,int> s;
+            for(int j = i; j < p.size(); j++){
+                s[s[i]]++;
+            }if(s == mp) cnt++;
+        }
+    }return cnt;
+};
+
+// optimised
+
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout.tie(NULL);
+        int n = s.size(), m = p.size();
+        if (n < m) return {};
+        vector<int> ans;
+        vector<int> freqP(26,0), freqS(26,0);
+        for (char c : p) freqP[c - 'a']++;
+        for (int i = 0; i < m; i++) freqS[s[i] - 'a']++;
+        if (freqS == freqP) ans.push_back(0);
+        for (int i = m; i < n; i++) {
+            freqS[s[i] - 'a']++;
+            freqS[s[i - m] - 'a']--;
+            if (freqS == freqP) ans.push_back(i - m + 1);
+        }return ans;
     }
 };
