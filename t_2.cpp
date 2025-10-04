@@ -664,3 +664,39 @@ public:
         }return ans;
     }
 };
+
+
+class Solution {
+public:
+    double new21Game(int n, int k, int maxPts) {
+        if (k == 0) return 1.0;
+        if (n >= k - 1 + maxPts) return 1.0;
+        vector<double> dp(n + 1, 0.0);
+        dp[0] = 1.0;
+        double window = 1.0;
+        double res = 0.0;
+        for (int i = 1; i <= n; ++i) {
+            dp[i] = window / maxPts;
+            if (i < k) window += dp[i];
+            else res += dp[i];
+            if (i - maxPts >= 0) window -= dp[i - maxPts];
+        }return res;
+    }
+};
+
+// TODO 
+
+class Solution {
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        
+    }
+};
+
+
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        
+    }
+};
