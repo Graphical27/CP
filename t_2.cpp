@@ -638,8 +638,8 @@ public:
             for(int j = i; j < p.size(); j++){
                 s[s[i]]++;
             }if(s == mp) cnt++;
-        }
-    }return cnt;
+        }return {cnt};
+    }
 };
 
 // optimised
@@ -687,16 +687,62 @@ public:
 // TODO 
 
 class Solution {
-public:
+public: // NOT COMPLETED CUZ IM TOO DUMB 
     int numEnclaves(vector<vector<int>>& grid) {
-        
+        int cnt_one = 0;
+        queue<pair<int,int>> q;
+        int n = grid.size(), m = grid[0].size();
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j  < m; j++){
+                if(grid[i][j] == 1){ 
+                    cnt_one = 1;
+                    q.push({i,j});
+                }
+            }
+        }vector<int> vis(n,0);
     }
 };
-
 
 class Solution {
 public:
     int totalFruit(vector<int>& fruits) {
-        
+        unordered_map<int,int> count;
+        int left = 0, res = 0;
+        for (int right = 0; right < fruits.size(); right++) {
+            count[fruits[right]]++;
+            while (count.size() > 2) {
+                count[fruits[left]]--;
+                if (count[fruits[left]] == 0) {
+                    count.erase(fruits[left]);
+                }left++;
+            }res = max(res, right - left + 1);
+        }return res;
     }
 };
+
+
+///////////////////////////  DUH RESTARTING GRAPH CUZ I FKED UP 
+
+
+class Solution {
+public:
+    int dfs(vector<vector<int>>& grid,vector<int> &vis,int &cnt,int i){
+        vis[i] = 1;
+        for(auto j:grid[i]){
+            if(!vis[j]) dfs(grid,vis,cnt,j);
+        }return 0;
+    }
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int cnt = 0;
+        int n = isConnected.size();
+        vector<int> vis(n,0);
+        for(int i = 0; i < n; i++){
+                if(!vis[i]){ 
+                    dfs(isConnected,vis,cnt,i);
+                    cnt++;
+                }
+        }return cnt;   
+    }
+};
+
+
