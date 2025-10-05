@@ -745,4 +745,44 @@ public:
     }
 };
 
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        queue<pair<int, pair<int,int>>> q;
+        int n = grid.size(), m = grid[0].size();
+        vector<vector<int>> vis(n,vector<int>(m,-1));
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 2){
+                    q.push({0,{i,j}});
+                    vis[i][j] = 2;
+                }
+            }
+        }
+        int ans = 0;
+        int dx[] = {-1,0,1,0};
+        int dy[] = {0,1,0,-1};
+        while(!q.empty()){
+            auto t = q.front(); q.pop();
+            auto temp = t.second;
+            int time = t.first;
+            int x = temp.first;
+            int y = temp.second;
+            ans = max(ans,time);
+            for(int k = 0; k < 4; k++){
+                int nr = x + dx[k];
+                int nc = y + dx[k];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < m && grid[nr][nc] == 1 && vis[nr][nc] == -1){
+                    q.push({time+1,{nr,nc}});
+                    vis[nr][nc] = 2;
+                }
+            }
+        }for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 1 && vis[i][j] == -1) return -1;
+            }
+        }return ans;
+    }
+};
+
 
