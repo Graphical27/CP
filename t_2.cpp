@@ -786,3 +786,70 @@ public:
 };
 
 
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        ios_base::sync_with_stdio(0);
+        cin.tie(0);
+        cout.tie(0);
+        int startcolor = image[sr][sc];
+        if(startcolor == color) return image;
+        int dr[] = {-1,0,1,0};
+        int dc[] = {0,1,0,-1};
+        int n = image.size();
+        int m = image[0].size();
+        vector<vector<int>> vis(n,vector<int>(m,0));
+        queue<pair<int,int>> q;
+        q.push({sr,sc});
+        vis[sr][sc] = 1;
+        image[sr][sc] = color;
+        while(!q.empty()){
+            auto [r,c] = q.front();
+            q.pop();
+            for(int k = 0; k < 4; k++){
+                int nr = r + dr[k];
+                int nc = c + dc[k];
+                if(nr>=0 && nc>=0 && nr<n && nc < m && image[nr][nc] == startcolor && !vis[nr][nc]){
+                    q.push({nr,nc});
+                    vis[nr][nc] = 1;
+                    image[nr][nc] = color;
+                }
+            }
+        }return image;
+    }
+};
+
+
+class Solution {
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        queue<pair<int,int>> q;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 1 && (i==0 || j==0 || i==n-1 || j==m-1)){
+                    q.push({i,j});
+                    grid[i][j] = 0;
+                }
+            }
+        }
+        int dr[] = {-1,0,1,0};
+        int dc[] = {0,1,0,-1};
+        while(!q.empty()){
+            auto [r,c] = q.front(); q.pop();
+            for(int k = 0; k < 4; k++){
+                int nr = r + dr[k], nc = c + dc[k];
+                if(nr>=0 && nr<n && nc>=0 && nc<m && grid[nr][nc]==1){
+                    grid[nr][nc] = 0;
+                    q.push({nr,nc});
+                }
+            }
+        }
+        int cnt = 0;
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < m; j++)
+                if(grid[i][j]==1) cnt++;
+
+        return cnt;
+    }
+};
