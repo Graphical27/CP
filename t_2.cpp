@@ -911,33 +911,33 @@ using namespace std;
 
 // W APPROACH 
 
-class Solution {
-public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> dict(wordList.begin(), wordList.end());
-        if (dict.find(endWord) == dict.end()) return 0;
-        queue<pair<string,int>> q;
-        q.push({beginWord, 1});
-        unordered_set<string> vis;
-        vis.insert(beginWord);
-        while (!q.empty()) {
-            auto [word, steps] = q.front();
-            q.pop();
-            if (word == endWord) return steps;
-            for (int i = 0; i < word.size(); i++) {
-                char original = word[i];
-                for (char c = 'a'; c <= 'z'; c++) {
-                    if (c == original) continue;
-                    word[i] = c;
-                    if (dict.count(word) && !vis.count(word)) {
-                        q.push({word, steps + 1});
-                        vis.insert(word);
-                    }
-                }word[i] = original;
-            }
-        }return 0;
-    }
-};
+// class Solution {
+// public:
+//     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+//         unordered_set<string> dict(wordList.begin(), wordList.end());
+//         if (dict.find(endWord) == dict.end()) return 0;
+//         queue<pair<string,int>> q;
+//         q.push({beginWord, 1});
+//         unordered_set<string> vis;
+//         vis.insert(beginWord);
+//         while (!q.empty()) {
+//             auto [word, steps] = q.front();
+//             q.pop();
+//             if (word == endWord) return steps;
+//             for (int i = 0; i < word.size(); i++) {
+//                 char original = word[i];
+//                 for (char c = 'a'; c <= 'z'; c++) {
+//                     if (c == original) continue;
+//                     word[i] = c;
+//                     if (dict.count(word) && !vis.count(word)) {
+//                         q.push({word, steps + 1});
+//                         vis.insert(word);
+//                     }
+//                 }word[i] = original;
+//             }
+//         }return 0;
+//     }
+// };
 
 // int main() {
 //     Solution s;
@@ -947,3 +947,49 @@ public:
 //     cout << s.ladderLength(beginWord, endWord, wordList) << "\n";
 //     return 0;
 // }
+
+
+// class Solution {
+// public:
+//     int maximumWhiteTiles(vector<vector<int>>& tiles, int carpetLen) {
+//         sort(tiles.begin(), tiles.end());
+//         vector<vector<int>> new_tiles;
+//         int n = tiles.size();
+//         int start = tiles[0][0], end = tiles[0][1];
+//         for(int i = 1; i < n; i++){
+//             if(tiles[i][0] <= end){
+//                 end = max(end, tiles[i][1]);
+//             } else {
+//                 new_tiles.push_back({start, end});
+//                 start = tiles[i][0];
+//                 end = tiles[i][1];
+//             }
+//         }new_tiles.push_back({start, end}); 
+//         int maxi = 0;
+//         for(auto &seg : new_tiles){
+//             maxi = max(maxi, seg[1] - seg[0]);
+//         }return maxi > carpetLen ? carpetLen : maxi;
+//     }
+// };
+
+
+// to do this is hard fr getting no idea how to solve it 
+class Solution {
+public:
+    int maximumWhiteTiles(vector<vector<int>>& tiles, int carpetLen) {
+        
+    }
+};
+
+
+int main() {
+    // vector<pair<int,int>> tiles = {{1,5}, {10,11}, {12,18}, {20,25}, {30,32}};
+    vector<pair<int,int>> tiles = {{1,5},  {12,18}, {20,25}, {30,32}, {10,11}};
+    sort(tiles.begin(),tiles.end());
+    for(auto &p : tiles) {
+        cout << "(" << p.first << "," << p.second << ") ";
+    }
+    cout << "\n";
+
+    return 0;
+}
