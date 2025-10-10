@@ -994,85 +994,68 @@ int main() {
     return 0;
 }
 
-#include <bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
-    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> wordSet(wordList.begin(), wordList.end());
-        if (!wordSet.count(endWord)) return {};
-
-        unordered_map<string, int> dist;  // distance of each word from beginWord
-        unordered_map<string, vector<string>> adj;  // adjacency list for backtracking
-        queue<string> q;
-        q.push(beginWord);
-        dist[beginWord] = 0;
-
-        int wordLen = beginWord.size();
-
-        // BFS to compute shortest distances
-        while (!q.empty()) {
-            string word = q.front();
-            q.pop();
-            int step = dist[word];
-
-            for (int i = 0; i < wordLen; i++) {
-                string temp = word;
-                for (char c = 'a'; c <= 'z'; c++) {
-                    temp[i] = c;
-                    if (wordSet.count(temp)) {
-                        adj[temp].push_back(word);  // build reverse adjacency
-                        if (!dist.count(temp)) {
-                            dist[temp] = step + 1;
-                            q.push(temp);
-                        }
-                    }
-                }
-            }
-        }
-
-        vector<vector<string>> ans;
-        vector<string> path = {endWord};
-
-        if (dist.count(endWord))
-            backtrack(endWord, beginWord, adj, dist, path, ans);
-
-        return ans;
-    }
-
-    void backtrack(string word, string beginWord, 
-                   unordered_map<string, vector<string>>& adj,
-                   unordered_map<string, int>& dist, 
-                   vector<string>& path, 
-                   vector<vector<string>>& ans) {
+    vector<vector<string>> ans;
+    unordered_map<string, vector<string>> parents; 
+    unordered_map<string, int> distance; 
+    void backtrack(string &word, string &beginWord, vector<string> &path) {
         if (word == beginWord) {
+            path.push_back(word);
             vector<string> temp = path;
             reverse(temp.begin(), temp.end());
             ans.push_back(temp);
+            path.pop_back();
             return;
         }
 
-        for (auto& prev : adj[word]) {
-            if (dist[word] == dist[prev] + 1) {
-                path.push_back(prev);
-                backtrack(prev, beginWord, adj, dist, path, ans);
-                path.pop_back();
+        path.push_back(word);
+        for (auto &p : parents[word]) {
+            backtrack(p, beginWord, path);
+        }
+        path.pop_back();
+    }
+
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> dict(wordList.begin(), wordList.end());
+        if (dict.find(endWord) == dict.end()) return {};
+
+        queue<string> q;
+        q.push(beginWord);
+        distance[beginWord] = 0;
+
+        int wordLen = beginWord.size();
+
+        while (!q.empty()) {
+            string word = q.front(); q.pop();
+            int curDist = distance[word];
+            if (word == endWord) break;
+
+            string temp = word;
+            for (int i = 0; i < wordLen; i++) {
+                char original = temp[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    if (c == original) continue;
+                    temp[i] = c;
+                    if (dict.count(temp)) {
+                        if (!distance.count(temp)) {
+                            distance[temp] = curDist + 1;
+                            q.push(temp);
+                            parents[temp].push_back(word);
+                        } else if (distance[temp] == curDist + 1) {
+                            parents[temp].push_back(word);
+                        }
+                    }
+                }
+                temp[i] = original;
             }
         }
+
+        if (!distance.count(endWord)) return {};
+
+        vector<string> path;
+        backtrack(endWord, beginWord, path);
+
+        return ans;
     }
 };
-
-int main() {
-    Solution s;
-    string beginWord = "hit";
-    string endWord = "cog";
-    vector<string> wordList = {"hot", "dot", "dog", "lot", "log", "cog"};
-
-    auto res = s.findLadders(beginWord, endWord, wordList);
-    for (auto &seq : res) {
-        for (auto &word : seq) cout << word << " ";
-        cout << "\n";
-    }
-    return 0;
-}
