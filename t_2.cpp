@@ -1061,32 +1061,23 @@ public:
 };
 
 
-#include <bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
+    bool dfs(vector<vector<int>>& graph, vector<int>& colors, int node, int color) {
+        colors[node] = color;
+        for (int neighbor : graph[node]) {
+            if (colors[neighbor] == color) return false;
+            if (colors[neighbor] == 0 && !dfs(graph, colors, neighbor, -color)) return false;
+        }return true;
+    }
+    
     bool isBipartite(vector<vector<int>>& graph) {
-        int n = graph.size();
-        vector<int> color(n, -1); 
-        for (int i = 0; i < n; i++) {
-            if (color[i] == -1) {
-                queue<int> q;
-                q.push(i);
-                color[i] = 0;
-                while (!q.empty()) {
-                    int node = q.front(); q.pop();
-                    for (auto neigh : graph[node]) {
-                        if (color[neigh] == -1) {
-                            color[neigh] = 1 - color[node];
-                            q.push(neigh);
-                        } else if (color[neigh] == color[node]) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
+        int v = graph.size();
+        vector<int> colors(v, 0);
+        for (int i = 0; i < v; i++) {
+            if (colors[i] == 0 && !dfs(graph, colors, i, 1)) return false;
+        }return true;
     }
 };
+
+
