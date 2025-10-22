@@ -1061,23 +1061,126 @@ public:
 };
 
 
+
 class Solution {
 public:
-    bool dfs(vector<vector<int>>& graph, vector<int>& colors, int node, int color) {
-        colors[node] = color;
-        for (int neighbor : graph[node]) {
-            if (colors[neighbor] == color) return false;
-            if (colors[neighbor] == 0 && !dfs(graph, colors, neighbor, -color)) return false;
+    bool dfs(vector<vector<int>>& graph, vector<int> &colour,int node, int col){
+        colour[node] = col;
+        for(auto it:graph[node]){
+            if(colour[it] == col) return false;
+            if(colour[it] == 0 && !dfs(graph,colour,it,-col)) return false;
         }return true;
     }
-    
     bool isBipartite(vector<vector<int>>& graph) {
         int v = graph.size();
-        vector<int> colors(v, 0);
-        for (int i = 0; i < v; i++) {
-            if (colors[i] == 0 && !dfs(graph, colors, i, 1)) return false;
+        vector<int> colour(v,0);
+        for(int i = 0; i < v; i++){
+            if(colour[i] == 0 && !dfs(graph, colour, i, 1)) return false;
         }return true;
     }
 };
 
+
+
+class Solution {
+public: 
+    bool dfs(int node, vector<int> adj[], vector<int>& vis, vector<int>& path) {
+        vis[node] = 1;
+        path[node] = 1;
+        for(auto neigh : adj[node]){
+            if(!vis[neigh]){
+                if(dfs(neigh, adj, vis, path)) return true;
+            }else if(path[neigh]) return true;
+        }path[node] = 0;
+        return false;
+    }
+    bool isCyclic(int n, vector<int> adj[]) {
+        vector<int> vis(n, 0), path(n, 0);
+        for(int i = 0; i < n; i++) {
+            if(!vis[i]){
+                if(dfs(i, adj, vis, path)) return true;
+            }
+        }return false;
+    }
+};
+
+
+
+class Solution{
+public:
+    void dfs(vector<int> adj[],vector<int> &vis,stack<int> &st, int node){
+        vis[node] = 1;
+        for(auto it:adj[node]){
+            if(!vis[it]){
+                dfs(adj,vis,st,it);
+            }
+        }st.push(node);
+    }   
+    vector<int> topoSort(int V, vector<int> adj[]){
+        vector<int> vis(V,0);
+        stack<int> st;
+        for(int i = 0; i < V; i++){
+            if(!vis[i]){
+                dfs(adj,vis,st,i);
+            }
+        }vector<int> ans;
+        while(!st.empty()){
+            int temp = st.top(); st.pop();
+            ans.push_back(temp);
+        }return ans;
+    }
+};
+
+
+class Solution{
+public:
+    vector<int> topoSort(int V, vector<int> adj[]){
+        queue<int> q;
+        vector<int> indegree(V,0);
+        for(int i = 0; i < V; i++){
+            for(auto it:adj[i]){
+                indegree[it]++;
+            }
+        }for(int i = 0; i < V; i++){
+            if(!indegree[i]) q.push(i);
+        }
+        vector<int> topo;
+        while(!q.empty()){
+            int current = q.front(); q.pop();
+            topo.push_back(current);
+            for(auto it:adj[current]){
+                indegree[it] -=1;
+                if(!indegree[it]) q.push(it);
+            }
+        }return topo;
+    }
+};
+
+
+
+
+class Solution {
+public:
+    bool isCyclic(int n, vector<int> adj[]) {
+        vector<int> indegree(n, 0);
+        for (int i = 0; i < n; i++) {
+            for (auto it : adj[i]) {
+                indegree[it]++;
+            }
+        }queue<int> q;
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0)
+                q.push(i);
+        }int count = 0;
+        while (!q.empty()) {
+            int node = q.front(); q.pop();
+            count++;
+            for (auto it : adj[node]) {
+                indegree[it]--;
+                if (indegree[it] == 0)
+                    q.push(it);
+            }
+        }return count != n;
+    }
+};
 
