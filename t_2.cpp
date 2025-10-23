@@ -1184,3 +1184,107 @@ public:
     }
 };
 
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites){
+        vector<int> topo;
+        vector<vector<int>> adj(numCourses,vector<int> (2,0));
+        stack<int> st;
+        for(int i = 0; i < prerequisites.size(); i++){
+            auto[x,y] = prerequisites[i];
+            adj[x].push_back(y);
+        }
+    }
+};
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> indeegree(numCourses,0);
+        vector<vector<int>> adj(numCourses,vector<int> ());
+        vector<int> ans;
+        queue<int> q;
+        for(int i = 0; i < prerequisites.size(); i++){
+            indeegree[prerequisites[i][0]]++;
+            adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }for(int i = 0; i < indeegree.size(); i++){
+            if(!indeegree[i]){
+                ans.push_back(i);
+                q.push(i);
+            }
+        }while(!q.empty()){
+            int current = q.front(); q.pop();
+            for(auto it:adj[current]){
+                indeegree[it]-=1;
+                if(!indeegree[it]){
+                    ans.push_back(it);
+                    q.push(it);
+                }
+            }
+        }return numCourses == ans.size();
+    }
+};
+
+
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> indeegree(numCourses,0);
+        vector<vector<int>> adj(numCourses,vector<int> ());
+        vector<int> ans;
+        queue<int> q;
+        for(int i = 0; i < prerequisites.size(); i++){
+            indeegree[prerequisites[i][0]]++;
+            adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }for(int i = 0; i < indeegree.size(); i++){
+            if(!indeegree[i]){
+                ans.push_back(i);
+                q.push(i);
+            }
+        }while(!q.empty()){
+            int current = q.front(); q.pop();
+            for(auto it:adj[current]){
+                indeegree[it]-=1;
+                if(!indeegree[it]){
+                    ans.push_back(it);
+                    q.push(it);
+                }
+            }
+        }return numCourses == ans.size() ? ans : vector<int> ();
+    }
+};
+
+
+
+
+class Solution {
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<vector<int>> rev(n);  
+        vector<int> indegree(n, 0);
+        for (int i = 0; i < n; i++) {
+            for (auto it : graph[i]) {
+                rev[it].push_back(i);
+                indegree[i]++;
+            }
+        }queue<int> q;
+        vector<int> safe;
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0)
+                q.push(i);
+        }
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            safe.push_back(node);
+            for (auto prev : rev[node]) {
+                indegree[prev]--;
+                if (indegree[prev] == 0)
+                    q.push(prev);
+            }
+        }sort(safe.begin(), safe.end());
+        return safe;
+    }
+};
