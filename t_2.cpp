@@ -1288,3 +1288,27 @@ public:
         return safe;
     }
 };
+
+
+
+class Solution{
+public:
+    string findOrder(string dict[],int N, int K){
+        vector<int> adj[K];
+        for(int i = 0; i < N - 1; i++){
+            string s1 = dict[i];
+            string s2 = dict[i + 1];
+            int len = min(s1.size(),s2.size());
+            for(int ptr = 0; ptr < len; ptr++){
+                if(s1[ptr] != s2[ptr]){
+                    adj[s1[ptr] - 'a'].push_back(s2[ptr] - 'a');
+                }
+            }
+        }vector<int> indeegre(K,0);
+        for(int i = 0; i < adj.size(); i++){
+
+        }
+    }
+};
+
+
