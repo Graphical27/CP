@@ -29,33 +29,31 @@ int lcm(int a,int b){ return (a*b)/gcd(a,b);}
 int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vector<vector<int>> dp(n+1, vector<int>(m+1, 0));for(int i = 1; i <= n; i++){for(int j = 1; j <= m; j++){if(a[i-1] == b[j-1]){dp[i][j] = 1 + dp[i-1][j-1];res = max(res, dp[i][j]);}}}return res;}
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
-void solve() {
-    int n;  cin >> n;
+void solve(){
+    int n; cin >> n;
     vector<int> b(n);
     for (int i = 0; i < n; i++) cin >> b[i];
-    vector<int> a(n);
-    a[0] = 1;
-    for (int i = 1; i < n; i++) {
-        if ( abs(b[i - 1] - b[i]) == 1) {
-            a[i] = a[i - 1];
+    vector<int> ans(n);
+    ans[0] = 1;
+    int flag = 1;
+    for(int i = 1; i < n; i++){
+        int diff = b[i] - b[i - 1];
+        int idx = i - diff;
+        if(idx >= 0){
+            ans[i] = ans[idx];
         } else {
-            a[i] = a[i - 1] + 1;
+            ans[i] = ++flag;
         }
-    }
-    for (int i = 0; i < n; i++) {
-        cout << a[i] << " ";
+    }for (int i = 0; i < n; i++) {
+        if (i) cout << ' ';
+        cout << ans[i];
     }cout << ln;
 }
-
 
 int32_t main(){
     Fast_IO;
     int t = 1; cin >> t;
     while (t--){
-        auto begin = chrono::high_resolution_clock::now();
         solve();
-        auto end = chrono::high_resolution_clock::now();
-        auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
-        cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds." << ln;
     }
 }
