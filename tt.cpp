@@ -106,3 +106,23 @@ public:
         return dist;
     }
 };
+
+
+class Solution{
+public:
+    vector<int> dijkstra(int V, vector<vector<int>> adj[], int S) {
+        int n = adj.size();
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        vector<int> dist(n+1,1e9),parent(n+1);
+        iota(parent.begin(),parent.end(),0);
+        dist[0] = 0;
+        while(!pq.empty()){
+            auto [node,w] = pq.top(); pq.pop();
+            for(auto i:adj[node]){
+                if(dist[i] > dist[i] + w){
+                    dist[i] = 
+                }
+            }
+        }
+    }
+};
