@@ -107,22 +107,37 @@ public:
     }
 };
 
+class Solution {
+public:
+    vector<int> shortestPath(int N, int M, vector<vector<int>> &edges) {
+        vector<pair<int,int>> adj[N];
+        for(auto [u,v,w]:edges){
+            adj[u].push_back({v,w});
+        }const int inf = INT_MAX;
+        vector<int> dist(N,inf);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        dist[0] = 0;
+        while(!pq.empty()){
+            auto [d,u] = pq.top(); pq.pop();
+            for(auto [v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }for(auto &x:dist) if(x == inf) x = -1;
+        return dist;
+    }
+};
+
 
 class Solution{
 public:
-    vector<int> dijkstra(int V, vector<vector<int>> adj[], int S) {
-        int n = adj.size();
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-        vector<int> dist(n+1,1e9),parent(n+1);
-        iota(parent.begin(),parent.end(),0);
-        dist[0] = 0;
-        while(!pq.empty()){
-            auto [node,w] = pq.top(); pq.pop();
-            for(auto i:adj[node]){
-                if(dist[i] > dist[i] + w){
-                    dist[i] = 
-                }
-            }
+    vector<int> dijkstra(int N, vector<vector<int>> &edges[], int S) {
+        vector<pair<int,int>> adj[N];
+        for(auto [u,v,w]:edges){
+            
         }
     }
 };
