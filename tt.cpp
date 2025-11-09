@@ -1,3 +1,4 @@
+#define all(a) a.begin(),a.end()
 #include<bits/stdc++.h>
 using namespace std;
 #define ln "\n"
@@ -132,12 +133,38 @@ public:
 };
 
 
-class Solution{
+class Solution {
 public:
-    vector<int> dijkstra(int N, vector<vector<int>> &edges[], int S) {
+    vector<int> dijkstra(int N, vector<vector<int>> &edges, int S) {
         vector<pair<int,int>> adj[N];
-        for(auto [u,v,w]:edges){
-            
-        }
+        for(auto &e:edges){
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+            adj[u].push_back({v,w});
+        }const int inf = INT_MAX;
+        vector<int> dist(N,inf),parent(N,0);
+        iota(all(parent),0);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,S});
+        dist[S] = 0;
+        while(!pq.empty()){
+            auto[d,u] = pq.top(); pq.pop();
+            for(auto [v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    parent[v] = u;
+                    pq.push({dist[v],v});
+                }
+            }
+        }if(dist[N-1] == inf) return {-1};
+        vector<int> path;
+        int node = N - 1;
+        while(parent[node] != node){
+            path.push_back(node);
+            node = parent[node];
+        }path.push_back(S);
+        reverse(all(path));
+        return path;
     }
 };
