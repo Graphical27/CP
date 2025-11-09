@@ -168,3 +168,39 @@ public:
         return path;
     }
 };
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int shortestPath(vector<vector<int>> &grid, pair<int, int> source, pair<int, int> destination) {
+        int n = grid.size(), m = grid[0].size();
+        if (grid[source.first][source.second] == 0 || grid[destination.first][destination.second] == 0) return -1;
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        queue<vector<int>> q;
+        q.push({source.first, source.second, 0});
+        vis[source.first][source.second] = 1;
+        int dr[] = {-1, 0, 1, 0};
+        int dc[] = {0, 1, 0, -1};
+        while (!q.empty()) {
+            auto temp = q.front();
+            q.pop();
+            int r = temp[0], c = temp[1], dist = temp[2];
+            if (r == destination.first && c == destination.second) return dist;
+            for (int i = 0; i < 4; i++) {
+                int nr = r + dr[i];
+                int nc = c + dc[i];
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m &&
+                    grid[nr][nc] == 1 && !vis[nr][nc]) {
+                    vis[nr][nc] = 1;
+                    q.push({nr, nc, dist + 1});
+                }
+            }
+        }
+        return -1;
+    }
+};
+
+
