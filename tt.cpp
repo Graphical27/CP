@@ -204,3 +204,83 @@ public:
 };
 
 
+
+class Solution {
+    public:
+    vector < int > shortestPath(int N, int M, vector < vector < int >> & edges) {
+        vector<pair<int,int>> adj[N];
+        for(auto &e:edges){
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+            adj[u].push_back({v,w});
+        }const int inf = INT_MAX;
+        vector<int> dist(N,inf);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        dist[0] = 0;
+        while(!pq.empty()){
+            auto[d,u] = pq.top(); pq.pop();
+            for(auto [v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v}); 
+                }
+            }
+        }for(auto &x:dist) if(x == inf) x = -1;
+    }return dist;
+};
+
+class Solution {
+public:
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        int n = heights.size(), m = heights[0].size();
+        vector<vector<int>> dist(n, vector<int>(m, INT_MAX));
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+        pq.push({0, 0, 0}); 
+        dist[0][0] = 0;
+        int dr[] = {-1, 0, 1, 0};
+        int dc[] = {0, 1, 0, -1};
+        while (!pq.empty()) {
+            auto cur = pq.top(); pq.pop();
+            int effort = cur[0], r = cur[1], c = cur[2];
+            if (r == n - 1 && c == m - 1) return effort;
+            if (effort > dist[r][c]) continue;
+            for (int i = 0; i < 4; i++) {
+                int nr = r + dr[i], nc = c + dc[i];
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m) {
+                    int newEffort = max(effort, abs(heights[nr][nc] - heights[r][c]));
+                    if (newEffort < dist[nr][nc]) {
+                        dist[nr][nc] = newEffort;
+                        pq.push({newEffort, nr, nc});
+                    }
+                }
+            }
+        }return 0;
+    }
+};
+
+
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<vector<int>> adj[n];
+        for(auto e:flights){
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+            adj[u].push_back({v,w});
+        }const int inf = INT_MAX;
+        vector<int> dist(n,inf);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,src});
+        dist[src] = 0;
+        while(!pq.empty()){
+            auto[price,u] = pq.top(); pq.pop();
+            if(u == dst) return price;
+            for(auto &[v,w]:adj[u]){
+                if()
+            } 
+        }
+    }
+};
