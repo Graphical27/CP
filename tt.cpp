@@ -206,32 +206,6 @@ public:
 
 
 class Solution {
-    public:
-    vector < int > shortestPath(int N, int M, vector < vector < int >> & edges) {
-        vector<pair<int,int>> adj[N];
-        for(auto &e:edges){
-            int u = e[0];
-            int v = e[1];
-            int w = e[2];
-            adj[u].push_back({v,w});
-        }const int inf = INT_MAX;
-        vector<int> dist(N,inf);
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-        pq.push({0,0});
-        dist[0] = 0;
-        while(!pq.empty()){
-            auto[d,u] = pq.top(); pq.pop();
-            for(auto [v,w]:adj[u]){
-                if(dist[v] > dist[u] + w){
-                    dist[v] = dist[u] + w;
-                    pq.push({dist[v],v}); 
-                }
-            }
-        }for(auto &x:dist) if(x == inf) x = -1;
-    }return dist;
-};
-
-class Solution {
 public:
     int minimumEffortPath(vector<vector<int>>& heights) {
         int n = heights.size(), m = heights[0].size();
@@ -282,5 +256,72 @@ public:
                 if()
             } 
         }
+    }
+};
+
+
+
+
+class Solution {
+    public:
+    vector < int > shortestPath(int N, int M, vector < vector < int >> & edges) {
+        vector<pair<int,int>> adj[N];
+        for(auto e:edges){
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+            adj[u].push_back({v,w});
+        }const int inf = INT_MAX;
+        vector<int> dist(N,inf);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        dist[0] = 0;
+        while(!pq.empty()){
+            auto[d,u] = pq.top(); pq.pop();
+            for(auto[v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }for(auto &x:dist) if(x == inf) x = -1;
+        return dist;
+    }
+};
+
+class Solution {
+public:
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        if(grid[0][0] != 0 || grid[n-1][n-1] != 0) return -1;
+        vector<vector<int>> vis(n,vector<int>(m,0));
+        queue<vector<int>> q;
+        q.push({0,0,1});
+        vis[0][0] = 1;
+        int dr[] = {-1,-1,-1,0,0,1,1,1};
+        int dc[] = {-1,0,1,-1,1,-1,0,1};
+        while (!q.empty()) {
+            auto temp = q.front(); q.pop();
+            int r = temp[0], c = temp[1], dist = temp[2];
+            if (r == n-1 && c == n-1) return dist;
+            for (int i = 0; i < 8; i++) {
+                int nr = r + dr[i];
+                int nc = c + dc[i];
+                if (nr >= 0 && nr < n && nc >= 0 && nc < n &&
+                    grid[nr][nc] == 0 && !vis[nr][nc]) {
+                    vis[nr][nc] = 1;
+                    q.push({nr, nc, dist + 1});
+                }
+            }
+        }return -1;
+    }
+};
+
+
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        
     }
 };
