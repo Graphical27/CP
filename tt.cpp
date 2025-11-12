@@ -329,20 +329,25 @@ public:
         int dr[] = {-1, 0, 1, 0};
         int dc[] = {0, 1, 0, -1};
         while (!pq.empty()) {
-            auto cur = pq.top(); pq.pop();
-            int effort = cur[0], r = cur[1], c = cur[2];
-            if (r == n - 1 && c == m - 1) return effort;
+            auto e = pq.top(); pq.pop();
+            int effort = e[0];
+            int r = e[1];
+            int c = e[2];
+            if(r == n - 1&& c == m - 1) return effort;
             if (effort > dist[r][c]) continue;
-            for (int i = 0; i < 4; i++) {
-                int nr = r + dr[i], nc = c + dc[i];
-                if (nr >= 0 && nr < n && nc >= 0 && nc < m) {
-                    int newEffort = max(effort, abs(heights[nr][nc] - heights[r][c]));
-                    if (newEffort < dist[nr][nc]) {
+            for(int i = 0; i < 4; i++){
+                int nr = r + dr[i];
+                int nc = c + dc[i];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < m){
+                    int newEffort = max(effort,abs(heights[nr][nc] - heights[r][c]));
+                    if(newEffort < dist[nr][nc]){
                         dist[nr][nc] = newEffort;
-                        pq.push({newEffort, nr, nc});
+                        pq.push({newEffort,nr,nc});
                     }
                 }
             }
         }return 0;
     }
 };
+
+
