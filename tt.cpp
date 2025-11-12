@@ -351,3 +351,66 @@ public:
 };
 
 
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<pair<int,int>> adj[n];
+        for(auto e:flights){
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+        adj[u].push_back({v,w});
+        }const int inf = INT_MAX;
+        vector<int> cost(n,inf);
+        queue<vector<int>> q;
+        q.push({0,0,src}); //stop,cost, pst
+        cost[src] = 0;
+        while(!q.empty()){
+            auto temp = q.front(); q.pop();
+            int step = temp[0];
+            int price = temp[1];
+            int  u = temp[2];
+            if(step > k) continue;
+            for(auto[v,w]:adj[u]){
+                if(cost[v] > price + w){
+                    cost[v] = price + w;
+                    q.push({step + 1,cost[v],v});
+                }
+            }
+        }return cost[dst] == INT_MAX ? -1:cost[dst];
+    }
+};
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<pair<int,int>> adj[n+1];
+        for (auto &e : times)
+            adj[e[0]].push_back({e[1], e[2]});
+        const int INF = INT_MAX;
+        vector<int> dist(n+1, INF);
+        dist[k] = 0;
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0, k}); 
+        while (!pq.empty()) {
+            auto [cost, u] = pq.top(); pq.pop();
+            if (cost > dist[u]) continue; 
+            for (auto [v, w] : adj[u]) {
+                if (dist[v] > cost + w) {
+                    dist[v] = cost + w;
+                    pq.push({dist[v], v});
+                }
+            }
+        }
+        int ans = *max_element(dist.begin() + 1, dist.end());
+        return (ans == INF) ? -1 : ans;
+    }
+};
+
+
+class Solution {
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        
+    }
+};
