@@ -410,8 +410,37 @@ public:
 
 class Solution {
 public:
-    int countPaths(int n, vector<vector<int>>& roads) {
-        
-        
+    int countPaths(int N, vector<vector<int>>& roads) {
+        vector<vector<int>> adj[N];
+        for(auto e:roads){
+            adj[e[0]].push_back({e[1],e[2]});
+        }const int inf = INT_MAX;
+        vector<int> dist(N,inf);
+        vector<int> vis(N,0);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        dist[0] = 0;
+        while(!pq.empty()){
+            auto[d,u] = pq.top(); pq.pop();
+            for(auto[v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                }   
+            }
+        }
+        set<vector<int>> s;
+        int mini = dist[N - 1];
+        queue<pair<int,int>> q;
+        fill(all(dist),inf);
+        q.push({0,0});
+        dist[0] = 0;
+        while(!q.empty()){
+            auto[dist,u] = q.front(); q.pop();
+            if(dist > mini) continue;
+            for(auto[v,w]:adj[u]){
+                if()
+            }
+        }
     }
 };
