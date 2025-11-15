@@ -2,6 +2,10 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ln "\n"
+#define ll long long
+#define MOD 1000000007
+
+
 class Solution {
     public:
         vector<int> shortestPath(vector<vector<int>>& edges, int N, int M){
@@ -408,17 +412,19 @@ public:
 };
 
 
+//! wrong 
+
 class Solution {
 public:
-    int countPaths(int N, vector<vector<int>>& roads) {
-        vector<vector<int>> adj[N];
+    int countPaths(int n, vector<vector<int>>& roads){
+        vector<pair<int,int>> adj[n];
         for(auto e:roads){
             adj[e[0]].push_back({e[1],e[2]});
+            adj[e[1]].push_back({e[0],e[2]});
         }const int inf = INT_MAX;
-        vector<int> dist(N,inf);
-        vector<int> vis(N,0);
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-        pq.push({0,0});
+        vector<int> dist(n ,inf);
+        priority_queue<pair<int,int>,  vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0}); // d,u
         dist[0] = 0;
         while(!pq.empty()){
             auto[d,u] = pq.top(); pq.pop();
@@ -426,21 +432,54 @@ public:
                 if(dist[v] > dist[u] + w){
                     dist[v] = dist[u] + w;
                     pq.push({dist[v],v});
-                }   
+                }
             }
-        }
-        set<vector<int>> s;
-        int mini = dist[N - 1];
-        queue<pair<int,int>> q;
+        }int mini = dist[n];
         fill(all(dist),inf);
+        queue<pair<int,int>> q;
         q.push({0,0});
         dist[0] = 0;
+        int cnt = 0;
         while(!q.empty()){
-            auto[dist,u] = q.front(); q.pop();
-            if(dist > mini) continue;
+            auto[d,u] = q.front(); q.pop();
+            if(d >= mini) continue;
             for(auto[v,w]:adj[u]){
-                if()
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    q.push({dist[v],v});
+                }if(v == n - 1) cnt++;
             }
-        }
+        }return cnt;
     }
-};
+};  
+
+
+class Solution {
+public:
+    int countPaths(int n, vector<vector<int>>& roads){
+        vector<pair<ll,ll>> adj[n];
+        for(auto e:roads){
+            adj[e[0]].push_back({e[1],e[2]});
+            adj[e[1]].push_back({e[0],e[2]});
+        }const ll inf = LONG_LONG_MAX;
+        vector<ll> dist(n,inf);
+        vector<ll> ways(n,0);
+        priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>> pq;
+        pq.push({0,0}); // d , u
+        dist[0] = 0;
+        ways[0] = 1;
+        while(!pq.empty()){
+            auto[d,u] = pq.top(); pq.pop();
+            for(auto[v,w]:adj[u]){  
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                    ways[v] = ways[u] % MOD;
+                }else if (dist[v] == dist[u] + w){
+                    ways[v] = (ways[v] + ways[u]) % MOD;
+                }
+
+            }       
+        }return ways[n-1] % MOD;
+    }
+};  
