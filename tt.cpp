@@ -482,4 +482,68 @@ public:
             }       
         }return ways[n-1] % MOD;
     }
-};  
+};
+
+
+class Solution {
+public:
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        int n = heights.size();
+        int m = heights[0].size();
+        const int inf = INT_MAX;
+        vector<vector<int>> dist(n,vector<int>(m,inf));
+        priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, greater<tuple<int,int,int>>> pq;
+        pq.push({0,0,0});
+        dist[0][0] = 0;
+        int dr[] = {-1,0,1,0};
+        int dc[] = {0,1,0,-1};
+        while(!pq.empty()){
+            auto[effort,r,c] = pq.top(); pq.pop();
+            if(r == n-1 && c == m-1) return effort;
+            if(effort > dist[r][c]) continue;
+            for(int i = 0; i < 4; i++){
+                int nr = r + dr[i];
+                int nc = c + dc[i];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < m){
+                    int newEffort = min(effort,abs(heights[nr][nc] - heights[r][c]));
+                    if(newEffort < effort){
+                        dist[nr][nc] = newEffort;
+                        pq.push({newEffort,nr,nc});
+                    }
+                }
+            }
+        }return 0;
+    }
+};
+
+
+
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<pair<int,int>> adj[n];
+        for(auto e:flights){
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+        adj[u].push_back({v,w});
+        }const int inf = INT_MAX;
+        vector<int> cost(n,inf);
+        queue<vector<int>> q;
+        q.push({0,0,src}); //stop,cost, pst
+        cost[src] = 0;
+        while(!q.empty()){
+            auto temp = q.front(); q.pop();
+            int step = temp[0];
+            int price = temp[1];
+            int  u = temp[2];
+            if(step > k) continue;
+            for(auto[v,w]:adj[u]){
+                if(cost[v] > price + w){
+                    cost[v] = price + w;
+                    q.push({step + 1,cost[v],v});
+                }
+            }
+        }return cost[dst] == INT_MAX ? -1:cost[dst];
+    }
+};
