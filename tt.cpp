@@ -700,3 +700,12 @@ public:
         return maxi == inf ? -1 : maxi;
     }
 };
+
+
+
+class Solution{
+public:
+    int minimumMultiplications(vector<int> &arr,int start, int end) {
+   
+    }
+};
