@@ -673,3 +673,30 @@ int main(){
     cout << sol.minimumMultiplications(a,3,30);
     return 1;
 }
+
+
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<pair<int,int>> adj[n+1];
+        for(auto e:times){
+            adj[e[0]].push_back({e[1],e[2]});
+        }const int inf = INT_MAX;
+        vector<int> dist(n+1,inf);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,k});
+        dist[k] = 0;
+        while(!pq.empty()){
+            auto[d,u] = pq.top(); pq.pop();
+            if(d > dist[u]) continue;
+            for(auto[v,w]:adj[u]){  
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }int maxi = *max_element(dist.begin() + 1, dist.end());
+        return maxi == inf ? -1 : maxi;
+    }
+};
