@@ -725,12 +725,57 @@ public:
     }
 };
 
-int main() {
-    vector<int> arr = {2, 5, 7};
-    int start = 3, end = 30;
-    Solution s;
-    int ans = s.minimumMultiplications(arr, start, end);
-    cout << "Minimum multiplications to reach " << end 
-         << " from " << start << ": " << ans << endl;
-    return 0;
-}
+// int main() {
+//     vector<int> arr = {2, 5, 7};
+//     int start = 3, end = 30;
+//     Solution s;
+//     int ans = s.minimumMultiplications(arr, start, end);
+//     cout << "Minimum multiplications to reach " << end 
+//          << " from " << start << ": " << ans << endl;
+//     return 0;
+// }
+
+
+// Negative Edges || Cycle
+class Solution {
+public:
+	vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+        vector<int> dist(V, INT_MAX); dist[S] = 0;
+	    for(int i=0;i<V-1;++i){
+            for(auto i:edges){
+                int u = i[0]; int v = i[1]; int w = i[2];
+                if(dist[u]!=INT_MAX && dist[u]+w<dist[v])
+                    dist[v]=dist[u]+w;
+            }
+        }
+        for(auto i:edges){
+            int u=i[0]; int v=i[1]; int w=i[2];
+            if(dist[u]!=INT_MAX && dist[u]+w<dist[v])
+                return {-1};
+        }return dist;
+	}
+};
+
+
+// Multiple Source Shortest Path and detect negative cycle
+
+class Solution {
+public:
+    void shortestDistance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        const int INF = 1e9;
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (matrix[i][j] == -1)
+                    matrix[i][j] = INF;
+        for (int k = 0; k < n; k++)
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    if (matrix[i][k] < INF && matrix[k][j] < INF)
+                        matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (matrix[i][j] >= INF)
+                    matrix[i][j] = -1;
+    }
+};
