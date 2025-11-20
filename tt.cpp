@@ -639,7 +639,7 @@ using namespace std;
 //     }
 // };
 
-
+/*
 
 class test{
 public:
@@ -700,12 +700,37 @@ public:
         return maxi == inf ? -1 : maxi;
     }
 };
+*/
 
-
-
-class Solution{
+class Solution {
 public:
-    int minimumMultiplications(vector<int> &arr,int start, int end) {
-   
+    int minimumMultiplications(vector<int> &arr, int start, int end) {
+        const int MOD_t = 100000;
+        vector<int> dist(MOD_t, INT_MAX);
+        queue<int> q;
+        dist[start] = 0;
+        q.push(start);
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            if (u == end) return dist[u];
+            for (int x : arr) {
+                int v = (u * x) % MOD_t;
+                if (dist[v] == INT_MAX) {
+                    dist[v] = dist[u] + 1;
+                    q.push(v);
+                }
+            }
+        }return -1;
     }
 };
+
+int main() {
+    vector<int> arr = {2, 5, 7};
+    int start = 3, end = 30;
+    Solution s;
+    int ans = s.minimumMultiplications(arr, start, end);
+    cout << "Minimum multiplications to reach " << end 
+         << " from " << start << ": " << ans << endl;
+    return 0;
+}
