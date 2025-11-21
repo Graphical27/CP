@@ -774,6 +774,24 @@ public:
 	}
 };
 
+class Solution {
+public:
+	vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+        vector<int> dist(V,INT_MAX);
+        for(int i = 0; i < V - 1; i++){
+            for(auto [u,v,w]:edges){
+                if(dist[u] != INT_MAX && dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }for(auto [u,v,w]:edges){
+            if(dist[u] != INT_MAX && dist[v] > dist[u] + w){
+                return {-1};
+            }
+        }return dist;
+	}
+};
+
 
 
 
@@ -797,5 +815,111 @@ public:
             for (int j = 0; j < n; j++)
                 if (matrix[i][j] >= INF)
                     matrix[i][j] = -1;
+    }
+};
+
+class Solution {
+public:
+    void shortestDistance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == -1) matrix[i][j] = 1e9;
+                if(i == j) matrix[i][j] = 0;
+            }
+        }for(int k = 0; k < n; k++){
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    if(matrix[i][k] < 1e9 && matrix[k][j] < 1e9){
+                        matrix[i][j] = min(matrix[i][j],matrix[i][k] + matrix[k][j]);
+                    }
+                }
+            }
+        } // if negative loop is there 
+        for(int i = 0; i < n; i++){
+            if(matrix[i][i] < 0){
+                cout << "Negative Loop Is In The Given Matrix\n";
+                return;
+            }
+        }for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] >= 1e9){
+                    matrix[i][j] = -1;
+                }
+            }
+        }
+    }
+};
+
+
+
+// class Solution {
+// public:
+//     int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+//         vector<vector<int>> matrix(n,vector<int>(n,1e9));
+//         for(auto e:edges){
+//             int u = e[0];
+//             int v = e[1];
+//             int w = e[2];
+//             matrix[u][v] = w;
+//             matrix[v][u] = w;
+//         }for(int k = 0; k < n; k++){
+//             for(int i = 0; i < n; i++){
+//                 for(int j = 0; j < n; j++){
+//                     if(matrix[i][j] < 1e9 && matrix[j][i] < 1e9){
+//                         matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+//                     }
+//                 }
+//             }
+//         }pair<int,int> ans(INT_MAX,INT_MAX); // mini, city;
+//         for(int i = 0; i < n; i++){
+//             int cnt = 0;
+//             for(int j = 0; j < n; j++){
+//                 if(matrix[i][j] <= distanceThreshold) cnt++;    
+//             }if(ans.first > cnt){
+//                 ans.first = cnt;
+//                 ans.second = i;
+//             }else if(ans.first == cnt && i > ans.second) ans.second = i;
+//         }return ans.second;
+//     }
+// };
+
+
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        const int INF = 1e9;
+        vector<vector<int>> dist(n, vector<int>(n, INF));
+        for (int i = 0; i < n; i++) {
+            dist[i][i] = 0;
+        }
+        for (auto &e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            dist[u][v] = w;
+            dist[v][u] = w;
+        }
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+        int minCount = INT_MAX;
+        int resultCity = -1;
+        for (int i = 0; i < n; i++) {
+            int countReachable = 0;
+            for (int j = 0; j < n; j++) {
+                if (i != j && dist[i][j] <= distanceThreshold) {
+                    countReachable++;
+                }
+            }
+            if (countReachable < minCount || (countReachable == minCount && i > resultCity)) {
+                minCount = countReachable;
+                resultCity = i;
+            }
+        }return resultCity;
     }
 };
