@@ -923,3 +923,77 @@ public:
         }return resultCity;
     }
 };
+
+
+class Solution {
+    public:
+    vector <int> shortestPath(int N, int M, vector < vector < int >> & edges) {
+        vector<pair<int,int>> adj[N];
+        for(auto e:edges){
+            adj[e[0]].push_back({e[1],e[2]});
+            adj[e[1]].push_back({e[0],e[2]});
+        }const int inf = INT_MAX;
+        vector<int> dist(N,inf);
+        priority_queue<queue<pair<int,int>>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0}); // dist, u
+        dist[0] = 0;
+        while(!pq.empty()){
+            auto[d,u] = pq.top();
+            pq.pop();
+            if(d > dist[u]) continue;
+            for(auto [v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }for(auto x:dist) if(x == inf) x = -1;
+        return dist;
+    }
+};
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k){
+        vector<pair<int,int>> adj[n+1];
+        for(auto e:times){
+            adj[e[0]].push_back({e[1],e[2]});
+        }const int inf = INT_MAX;
+        vector<int> dist(n+1,inf);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,k});
+        dist[k] = 0;
+        for(;!pq.empty();){
+            auto[d,u] = pq.top(); pq.pop();
+            if(d > dist[u]) continue;
+            for(auto[v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }int maxi = *max_element(all(dist));
+        return maxi == inf ? -1 : maxi;
+    }
+};
+
+class Solution {
+public:
+    int minimumMultiplications(vector<int> &arr, int start, int end) {
+        const int MOD = 100000;
+        vector<int> dist(MOD,INT_MAX);
+        queue<pair<int,int>> q;
+        q.push({start,0}); // number, pst;
+        dist[start] = 0;
+        while(!q.empty()){
+            auto[u,step] = q.front(); q.pop();
+            for(auto i:arr){
+                int k = (i * u) % MOD;
+                if(dist[k] > dist[u] + 1){
+                    dist[k] = dist[u] + 1;
+                    q.push({k,step + 1});
+                }
+            }
+        }return dist[end] == INT_MAX ? -1 : dist[end];
+    }
+};
