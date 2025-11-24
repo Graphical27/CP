@@ -1028,3 +1028,32 @@ public:
         }
     }
 };
+
+
+class Solution {
+public:
+    vector<int> shortestPath(int N, int M, vector<vector<int>> &edges) {
+        vector<pair<int,int>> adj[N];
+        for(auto e:edges){
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+            adj[u].push_back({v,w});
+        }int const inf  = INT_MAX;
+        vector<int> dist(N,inf);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        while(!pq.empty()){
+            auto[d,u] = pq.top();
+            pq.pop();
+            for(auto[v,w]:adj[N]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }
+        for(auto x:dist) if(x == inf) x = -1;
+        return dist; 
+    }
+};
