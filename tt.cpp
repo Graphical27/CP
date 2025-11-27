@@ -1057,3 +1057,163 @@ public:
         return dist; 
     }
 };
+
+class Solution {
+public:
+    void shortestDistance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == -1) matrix[i][j] = 1e9;
+                if(i == j) matrix[i][j] = 0;
+            }
+        }
+        for(int k = 0; k < n; k++){
+            for(int i = 0; i < n; k++){
+                for(int j = 0; j < n; j++){
+                    if(matrix[i][k] < 1e9 && matrix[k][j] < 1e9){
+                        matrix[i][j] = min(matrix[i][j],  matrix[i][k] + matrix[k][j]);
+                    }
+                }
+            }
+        }for(int i = 0; i < n; i++){
+            if(matrix[i][i] == 0){
+                cout << "Negative cycle exist" << "\n";
+            }
+        }for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] >= 1e9) matrix[i][j] = -1;
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    void shortestDistance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        const int inf = 1e9;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == -1) matrix[i][j] = inf;
+                if(i == j) matrix[i][j] = 0;
+            }
+        }for(int k = 0; k < n; k++){
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    if(matrix[i][k] < 1e9 && matrix[k][j]){
+                        matrix[i][j] = min(matrix[i][j],matrix[i][k] + matrix[k][i]);
+                    }
+                }
+            }for(int i = 0; i < n; i++){
+                if(matrix[i][i] == 0){
+                    cout << "Negative Cycle" << "\n";
+                    return;
+                }
+            }
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    if(matrix[i][j] >= 1e9) matrix[i][j] = -1;
+                }
+            }
+        } 
+    }
+};
+
+class Solution {
+public:
+	vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+        vector<int> dist(V, INT_MAX);
+        for(int i = 0; i < V; i++){
+            for(auto e:edges){
+                int u = e[0];
+                int v = e[1];
+                int w = e[2];
+                if(dist[u] !=INT_MAX && dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }for(auto e:edges){
+            if(dist[e[0]]!= INT_MAX && dist[e[1]] > dist[e[0]] + e[2]){
+                return {-1};
+            }
+        }return dist;
+    }
+};
+
+
+class Solution {
+public:
+    int minimumMultiplications(vector<int> &arr, int start, int end) {
+        const int MOD_t = 100000;
+        vector<int> dist(MOD_t, INT_MAX);
+        queue<int> q;
+        dist[start] = 0;
+        q.push(start);
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            if (u == end)
+                return dist[u];
+            for (int x : arr) {
+                int v = (u * x) % MOD_t;
+
+                if (dist[v] == INT_MAX) {
+                    dist[v] = dist[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+
+
+class Solution {
+public:
+    int minimumMultiplications(vector<int> &arr, int start, int end) {
+        const int MOD_t = 100000;
+        vector<int> dist(MOD_t, INT_MAX);
+        queue<int> q;
+        for(auto i:arr) dist[i] = 0;
+        q.push(start);
+        while(!q.empty()){
+            int u = q.front();
+            q.pop();
+            if(u == end) return dist[u];
+            for(auto i:arr){
+                int v = (u * i) % MOD_t;
+                if(dist[v] > dist[u] + 1){
+                    dist[v] = dist[u] + 1;
+                }
+            } 
+        }return -1;
+    }
+};
+
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<pair<int,int>> adj[n+1];
+        for (auto &e : times) adj[e[0]].push_back({e[1], e[2]});
+        vector<int> dist(n,1e9);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,k});
+        dist[k] = 0;
+        while(!pq.empty()){
+            auto[cost, u] = pq.top(); pq.pop();
+            if(cost > dist[u]) continue;
+            for(auto [v,w]:adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    pq.push({dist[v],v})
+                }
+            } 
+        }int maxi = *max_element(all(dist));
+        return maxi == 1e9 ? -1 : maxi;
+    }
+};
+
+
