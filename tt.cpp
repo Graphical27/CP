@@ -1217,3 +1217,27 @@ public:
 };
 
 
+
+
+class Solution {
+public:
+	vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+        vector<int> dist(V,INT_MAX);
+        dist[S] = 0;
+        for(int i = 0; i < V; i++){
+            for(auto e:edges){
+                int u = e[0];
+                int v = e[1];
+                int w = e[2];
+                if(dist[u]!= INT_MAX && dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }for(auto e:edges){
+            if(dist[e[0]] != INT_MAX && dist[e[1]] > dist[e[0]] + e[2]){
+                cout << {-1} << "\n";
+            }
+        }
+        return dist;
+    }
+};
