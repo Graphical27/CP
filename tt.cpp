@@ -797,26 +797,6 @@ public:
 
 // Multiple Source Shortest Path and detect negative cycle
 
-class Solution {
-public:
-    void shortestDistance(vector<vector<int>>& matrix) {
-        int n = matrix.size();
-        const int INF = 1e9;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                if (matrix[i][j] == -1)
-                    matrix[i][j] = INF;
-        for (int k = 0; k < n; k++)
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    if (matrix[i][k] < INF && matrix[k][j] < INF)
-                        matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                if (matrix[i][j] >= INF)
-                    matrix[i][j] = -1;
-    }
-};
 
 class Solution {
 public:
@@ -1239,5 +1219,74 @@ public:
             }
         }
         return dist;
+    }
+};
+
+
+class Solution {
+public:
+	vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+        vector<int> dist(V,INT_MAX);
+        dist[S] = 0;
+        for(int i = 0; i < V; i++){
+            for(auto e:edges){
+                if(dist[e[0]] != INT_MAX && dist[e[1]] > dist[e[0]] + e[2]){
+                    dist[e[1]] = dist[e[0]] + e[2];
+                }
+            }
+        }for(auto e:edges){
+            if(dist[e[0]]!=INT_MAX && dist[e[1]] > dist[e[0]] > dist[e[2]]){
+                return {-1};
+            }
+        }return dist;
+    }
+};
+
+
+
+
+class Solution {
+public:
+	void shortestDistance(vector<vector<int>>&matrix) {
+        int n = matrix.size();
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == -1) matrix[i][j] = 1e9;
+                if(i == j) matrix[i][j] = 1;
+            }
+        }for(int k = 0; k < n; k++){
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    if(matrix[i][k] != 1e9 && matrix[k][j] != 1e9){
+                        matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][i]);
+                    }
+                }
+            }
+        }for(int i = 0; i < n; i++){
+            if(matrix[i][i] > 0){
+                cout << "Negative Cycle" << "\n";
+            }
+        }
+	}
+};
+
+class Solution {
+public:
+    int minimumMultiplications(vector<int> &arr, int start, int end) {
+        const int MOD_t = 100000;
+        vector<int> dist(MOD_t,1e9);
+        queue<int> q;
+        q.push(start);
+        for(auto i: arr) dist[i] = 0;
+        while(!q.empty()){
+            int u = q.front(); q.pop();
+            if(u == end) return dist[u];
+            for(auto i:arr){
+                int v = (u * i) % MOD_t;
+                if(dist[v] > dist[u] + 1){
+                    dist[v] = dist[u] + 1;
+                }
+            }
+        }return -1;
     }
 };
