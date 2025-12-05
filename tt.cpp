@@ -1393,3 +1393,84 @@ public:
         }
     }
 };
+
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<pair<int,int>> adj[n + 1];
+        for(auto e:times){
+            adj[e[0]].push_back({e[1],e[2]});
+        }vector<int> dist(n+1,1e9);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,k}); // cost, point
+        dist[k] = 0;
+        while(!pq.empty()){
+            auto[cost,u] = pq.top(); pq.pop();
+            if(cost > dist[u]) continue;
+            for(auto [v,w]:adj[u]){
+                if(dist[v] > cost + w){
+                    dist[v] = cost + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }int maxi = *max_element(dist.begin() + 1, dist.end());
+        return maxi == 1e9 ? -1 : maxi;
+    }
+};
+
+
+
+
+class Solution {
+public:
+    void shortestDistance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        const int inf = 1e9;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == -1) matrix[i][j] = inf;
+                if(i == j) matrix[i][j] = 0;
+            }
+        }for(int k = 0; k < n; k++){
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    if(matrix[i][k] < 1e9 && matrix[k][j] < 1e9){
+                        matrix[i][j] = min(matrix[i][j],matrix[i][k] + matrix[k][j]);
+                    }
+                }
+            }
+        }for(int i = 0; i < n; i++){
+            if(matrix[i][i] > 0){
+                cout << " Circle Foudn\n";
+            }
+        }for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == inf) matrix[i][j] = -1;
+            }
+        }
+    }
+};
+
+
+class Solution {
+public:
+    int minimumMultiplications(vector<int> &arr, int start, int end) {
+        const int MOD_t = 100000;
+        vector<int> dist(MOD_t, INT_MAX);
+        queue<int> q;
+        dist[start] = 0;
+        q.push(start);
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            for(auto i : arr){
+                int v = (u * i) % MOD_t;
+                if(dist[v] > dist[u] + 1){
+                    dist[v] = dist[u] + 1;
+                    q.push(v);
+                }
+            }
+        }return -1;
+    }
+};
