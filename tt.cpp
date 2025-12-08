@@ -1476,4 +1476,27 @@ public:
 };
 
 
-tt
+class Solution{
+    public:
+    int spanningTree(int V, vector<vector<int>> adj[]) {
+        vector<int> vis(V,0);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0,0});
+        int sum = 0;
+        while(!pq.empty()){
+            auto[w,u] = pq.top();
+            pq.pop();
+            if(vis[u]) continue;
+            vis[u] = 1;
+            sum += w;
+            for(auto i:adj[u]){
+                int node = i[0];
+                int wt = i[1];
+                if(vis[node])continue;
+                pq.push({wt,node});        
+            }
+        }return sum;
+    }
+};
+
+
