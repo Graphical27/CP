@@ -30,44 +30,25 @@ int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vect
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(){
-    int n, x, y; cin >> n >> x >> y;
-    string s; cin >> s;
-    vector<int> v(n);
-    for(int i = 0; i < n; i++) cin >> v[i];
-    int reqa = 0, reqb = 0;
-    bool is_zero = false, is_one = false;
-    for(int i = 0; i < n; i++){
-        if(s[i] == '0'){
-            is_zero = true;
-            int amin = v[i] / 2 + 1;
-            int bmin = max(0LL, v[i] - amin);
-            reqa += amin;
-            reqb += bmin;
-        }else{
-            is_one = true;
-            int bmin = v[i] / 2 + 1;
-            int amin = max(0LL, v[i] - bmin);
-            reqa += amin;  
-            reqb += bmin;
-        }
+    int n,x,y; cin >> n >> x >> y;
+    vector<int> s(n+1), db(n+1);
+    for(int i=1;i<=n;i++){
+        char ch;
+        cin >> ch;
+        s[i] = (ch=='1');
     }
-    if(x < reqa || y < reqb){
-        cout << "NO" << ln;
-        return;
+    int a=0,b=0,sum=0;
+    for(int i=1;i<=n;i++){
+        cin >> db[i];
+        sum += db[i];
+        if(s[i]==0) a += (db[i]/2 + 1);
+        else b += (db[i]/2 + 1);
     }
-    if(!is_one){ 
-        if(x < y + n){
-            cout << "NO" << ln;
-            return;
-        }
-    }
-    if(!is_zero){ 
-        if(y < x + n){
-            cout << "NO" << ln;
-            return;
-        }
-    }
-    cout << "YES" << ln;
+    bool flag = 1;
+    if(a > x || b > y || sum > x + y) flag = 0;
+    if(a == 0 && x + n > y) flag = 0;
+    if(b == 0 && y + n > x) flag = 0;
+    cout << (flag ? "YES" : "NO") << ln;
 }
 
 int32_t main(){
