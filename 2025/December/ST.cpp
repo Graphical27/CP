@@ -121,3 +121,108 @@ public:
        
     }
 };
+
+
+// Prim's Algo
+
+class Solution{
+    public:
+    int spanningTree(int n, vector<vector<int>> adj[]){
+        vector<int> vis(n,0),dist(n,1e9);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        int sum = 0;
+        dist[0] = 0;
+        pq.push({0,0});
+        while(!pq.empty()){
+            auto[wt,u] = pq.top();
+            pq.pop();
+            if(vis[u]) continue;
+            vis[u] = 1;
+            sum+= wt;
+            for(auto i:adj[u]){
+                int v = i[0], wt = i[1];
+                if(vis[v]) continue;
+                pq.push({dist[v],v});
+            }
+        }return sum;
+    }   
+};
+
+// Kruskals 
+
+class DSU{
+public:
+    vector<int> parent,rankV;
+
+    DSU(int n){
+        parent.resize(n);
+        iota(all(parent),0);
+        rankV.assign(n,0);
+    }
+
+    int find(int x){
+        if(parent[x] != x){
+            parent[x] = find(parent[x]);
+        }return parent[x];
+    }
+
+    bool unite(int x,int y){
+        x = find(x);
+        y = find(y);
+        if(x == y) return false;
+        if(rankV[x] < rankV[y]) swap(x,y);
+        parent[y] = x;
+        if(rankV[x] == rankV[y]) rankV[x]++;
+        return true;
+    }
+};
+
+class Solution{
+    public:
+    int spanningTree(int V, vector<vector<int>> adj[]) {
+        vector<vector<int>> edges;
+        for(int i = 0; i < V; i++){
+            for(auto e:adj[i]){
+                if(i < e[0])
+                edges.push_back({e[1],i,e[0]});
+            }
+        }sort(all(edges));
+        DSU dsu(V);
+        int sum = 0;
+        for(auto e:edges){
+            if(dsu.unite(e[1],e[2])){
+                sum+=e[0];
+            }
+        }return sum;
+    }
+};
+
+
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int n = stones.size();
+        vector<vector<int>> adj(n);
+        for(int i = 0; i < n; i++){
+            for(int j = i + 1; j < n; j++){
+                if(stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]){
+                    adj[i].push_back(j);
+                    adj[j].push_back(i);
+                }
+            }
+        }vector<int> vis(n,0);
+        function<void(int)> dfs = [&](int x){
+            vis[x] = 1;
+            for(auto i:adj[x]){
+                if(!vis[i]) dfs(i);
+            }
+        };
+        int compo = 0;
+        for(int i = 0; i < n; i++){
+            if(!vis[i]){
+                dfs(i);
+                compo++;
+            }
+        } return n - compo;
+    }
+};
