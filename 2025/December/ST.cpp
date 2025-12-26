@@ -226,3 +226,61 @@ public:
         } return n - compo;
     }
 };
+
+
+
+
+
+class Solution {
+    #define Fast_IO                       \
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL)
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        Fast_IO;
+        unordered_map<string,string> parent;
+        unordered_map<string,vector<string>> edges;
+        function<int()> get_random = [](){
+            static mt19937 gen(chrono::steady_clock::now().time_since_epoch().count());
+            static uniform_int_distribution<int> dist(1, 1000000);
+            return dist(gen);
+        };
+        for(auto &acc : accounts){
+            string name = acc[0];
+            if(parent.find(name) == parent.end()){
+                parent[name] = name;
+            } else {
+                string new_name = name + "#" + to_string(get_random());
+                parent[new_name] = name;
+                name = new_name;
+            }
+            for(int i = 1; i < acc.size(); i++){
+                edges[name].push_back(acc[i]);
+                edges[acc[i]].push_back(name);
+            }
+        }
+        unordered_map<string,int> vis;
+        vector<vector<string>> ans;
+        function<void(string, vector<string>&)> dfs =
+        [&](string u, vector<string>& temp){
+            vis[u] = 1;
+            if(parent.find(u) == parent.end())   
+                temp.push_back(u);
+            for(auto &v : edges[u]){
+                if(!vis[v]) dfs(v, temp);
+            }
+        };
+        for(auto &it : parent){
+            string node = it.first;
+            if(vis[node]) continue;
+            vector<string> emails;
+            dfs(node, emails);
+            sort(emails.begin(), emails.end());
+            vector<string> temp;
+            temp.push_back(it.second);
+            temp.insert(temp.end(), emails.begin(), emails.end());
+            ans.push_back(temp);
+        }return ans;
+    }
+};
