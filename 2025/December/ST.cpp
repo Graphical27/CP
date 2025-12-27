@@ -495,3 +495,53 @@ public:
         }return n - components;
     }
 };
+
+
+class Solution{
+public:
+    vector<int> numOfIslands(int n, int m, vector<vector<int>> &A){
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        int sz = n * m;
+        vector<int> parent(sz), rankv(sz, 0);
+        vector<int> vis(sz, 0);
+        iota(parent.begin(), parent.end(), 0);
+        function<int(int)> findp = [&](int x){
+            if(parent[x] != x) parent[x] = findp(parent[x]);
+            return parent[x];
+        };
+        auto unite = [&](int x, int y){
+            x = findp(x);
+            y = findp(y);
+            if(x == y) return false;
+            if(rankv[x] < rankv[y]) swap(x, y);
+            parent[y] = x;
+            if(rankv[x] == rankv[y]) rankv[x]++;
+            return true;
+        };
+        int cnt = 0;
+        vector<int> ans;
+        int dr[4] = {0, 1, 0, -1};
+        int dc[4] = {-1, 0, 1, 0};
+        for(auto &v : A){
+            int r = v[0], c = v[1];
+            int id = r * m + c;
+            if(vis[id]){
+                ans.push_back(cnt);
+                continue;
+            }
+            vis[id] = 1;    
+            cnt++;
+            for(int k = 0; k < 4; k++){
+                int nr = r + dr[k];
+                int nc = c + dc[k];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < m){
+                    int nid = nr * m + nc;
+                    if(vis[nid]){
+                        if(unite(id, nid)) cnt--;
+                    }
+                }
+            }ans.push_back(cnt);
+        }return ans;
+    }
+};
