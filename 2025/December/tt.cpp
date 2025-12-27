@@ -1500,3 +1500,105 @@ class Solution{
 };
 
 
+class Solution {
+public:
+	vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+        vector<int> dist(V, INT_MAX); dist[S] = 0;
+	    for(int i=0;i<V-1;++i){
+            for(auto i:edges){
+                int u = i[0]; int v = i[1]; int w = i[2];
+                if(dist[u]!=INT_MAX && dist[u]+w<dist[v])
+                    dist[v]=dist[u]+w;
+            }
+        }   
+        for(auto i:edges){
+            int u=i[0]; int v=i[1]; int w=i[2];
+            if(dist[u]!=INT_MAX && dist[u]+w<dist[v])
+                return {-1};
+        }return dist;
+	}
+};
+
+class Solution {
+public:
+    void shortestDistance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        const int inf = 1e9;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == -1) matrix[i][j] = inf;
+                if(i == j) matrix[i][j] = 0;
+            }
+        }for(int k = 0; k < n; k++){
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    if(matrix[i][k] < 1e9 && matrix[k][j] < 1e9){
+                        matrix[i][j] = min(matrix[i][j],matrix[i][k] + matrix[k][j]);
+                    }
+                }
+            }
+        }for(int i = 0; i < n; i++){
+            if(matrix[i][i] > 0){
+                cout << " Circle Foudn\n";
+            }
+        }for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == inf) matrix[i][j] = -1;
+            }
+        }
+    }
+};
+
+
+class DSU {
+    vector<int> parent, rankv;
+public:
+    DSU(int n) {
+        parent.resize(n);
+        rankv.assign(n, 0);
+        iota(parent.begin(), parent.end(), 0);
+    }
+
+    int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    bool unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if (x == y) return false;
+        if (rankv[x] < rankv[y]) swap(x, y);
+        parent[y] = x;
+        if (rankv[x] == rankv[y]) rankv[x]++;
+        return true;
+    }
+};
+
+class Solution {
+public:
+    int spanningTree(int V, vector<vector<int>> adj[]) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        vector<array<int,3>> edges;
+        for (int u = 0; u < V; u++) {
+            for (auto &it : adj[u]) {
+                int v = it[0], w = it[1];
+                if (u < v)
+                    edges.push_back({w, u, v});
+            }
+        }
+        sort(edges.begin(), edges.end());
+        DSU dsu(V);
+        int sum = 0;
+        for (auto &e : edges) {
+            if (dsu.unite(e[1], e[2]))
+                sum += e[0];
+        }
+        return sum;
+    }
+};
+
+
+

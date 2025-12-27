@@ -284,3 +284,214 @@ public:
         }return ans;
     }
 };
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<pair<int,int>> adj[n + 1];
+        vector<int> dist(n + 1,1e9);
+        for(auto i:times){
+            adj[i[0]].push_back({i[1],i[2]});
+        }
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        dist[k] = 0;
+        pq.push({0,k}); // dist, node
+        while(!pq.empty()){
+            auto[d,u] = pq.top();
+            pq.pop();
+            if(d > dist[u]) continue;
+            for(auto [v,w]:adj[u]){
+                if(dist[v] > d + w){
+                    dist[v] = d + w;
+                    pq.push({dist[v],v});
+                }
+            }
+        }int maxi = *max_element(dist.begin() + 1,dist.end());
+        return maxi == 1e9 ? -1 : maxi;
+    }
+};
+
+class Solution{
+public:
+    int minimumMultiplications(vector<int> &arr,int start,int end){
+        const int MOD = 100000;
+        vector<int> dist(MOD, INT_MAX);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        dist[start] = 0;
+        pq.push({0, start});
+        while(!pq.empty()){
+            auto [step, cur] = pq.top();
+            pq.pop();
+            if(cur == end) return step;
+            if(step > dist[cur]) continue;
+            for(int x : arr){
+                int v = (cur * x) % MOD;
+                if(dist[v] > step + 1){
+                    dist[v] = step + 1;
+                    pq.push({step + 1, v});
+                }
+            }
+        }
+        return -1;
+    }
+};
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class DSU {
+    vector<int> parent, rankv;
+public:
+    DSU(int n) {
+        parent.resize(n);
+        rankv.assign(n, 0);
+        iota(parent.begin(), parent.end(), 0);
+    }
+
+    int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    bool unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if (x == y) return false;
+        if (rankv[x] < rankv[y]) swap(x, y);
+        parent[y] = x;
+        if (rankv[x] == rankv[y]) rankv[x]++;
+        return true;
+    }
+};
+
+class Solution {
+public:
+    int spanningTree(int V, vector<vector<int>> adj[]) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+
+        vector<array<int,3>> edges;
+
+        for (int u = 0; u < V; u++) {
+            for (auto &it : adj[u]) {
+                int v = it[0], w = it[1];
+                if (u < v)
+                    edges.push_back({w, u, v});
+            }
+        }
+
+        sort(edges.begin(), edges.end());
+
+        DSU dsu(V);
+        int sum = 0;
+
+        for (auto &e : edges) {
+            if (dsu.unite(e[1], e[2]))
+                sum += e[0];
+        }
+
+        return sum;
+    }
+};
+
+
+class Solution{
+    public:
+    int spanningTree(int n, vector<vector<int>> adj[]){
+        vector<int> vis(n,0), dist(n,1e9);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        int sum = 0;
+        dist[0] = 0;
+        pq.push({0,0});
+        while(!pq.empty()){
+            auto[wt, u] = pq.top(); pq.pop();
+            if(vis[u]) continue;
+            vis[u] = 1;
+            sum+=wt;
+            for(auto i:adj[u]){
+                int v = i[0], wt = i[1];
+                if(vis[v]) continue;
+                pq.push({dist[v],v});
+            }
+        }return sum;
+    }   
+};
+
+class DSU{
+public:
+    vector<int> parent,rank;
+
+    DSU(int n){
+        parent.resize(n);
+        iota(all(parent),0);
+        rank.assign(n,0);
+    }
+
+    int find(int x){
+        if(parent[x]!=x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    bool unite(int x,int y){
+        x = find(x);
+        y = find(y);
+        if(x == y) return false;
+        if(rank[x] < rank[y]) swap(x,y);
+        parent[y] = x;
+        if(rank[x] == rank[y]) rank[x]++;
+        return true;   
+    }
+};
+
+class Solution{
+    public:
+    int spanningTree(int n, vector<vector<int>> adj[]){
+        vector<array<int,3>> edges;
+        for(int i = 0; i < n; i++){
+            for(auto e:adj[i]){
+                int v = e[0], w = e[1];
+                if(i < v){
+                    edges.push_back({w,i,v});
+                }
+            }
+        }sort(all(edges));
+        DSU dsu(n);
+        int sum = 0;
+        for(auto e:edges){
+            if(dsu.unite(e[1],e[2])){
+                sum += e[0];
+            }
+        }return sum;
+    }   
+};
+
+
+
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int n = stones.size();
+        vector<vector<int>> adj(n);
+        for(int i = 0; i < n - 1; i++){
+            for(int j = i + 1; j < n; j++){
+                if(stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]){
+                    adj[i].push_back(j);
+                    adj[j].push_back(i);
+                }
+            }
+        }vector<int> vis(n,0);
+        function<void(int)> dfs = [&](int u){
+            vis[u] = 1;
+            for(int v:adj[u]) if(!vis[v]) dfs(v);
+        };
+        int components = 0;
+        for(int i = 0; i < n; i++){
+            if(!vis[i]){
+                dfs(i);
+                components++;
+            }
+        }return n - components;
+    }
+};
