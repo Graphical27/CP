@@ -545,3 +545,109 @@ public:
         }return ans;
     }
 };
+
+
+class Solution {
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int sz = n * n;
+        vector<int> parent(sz), size(sz,1);
+        iota(parent.begin(), parent.end(), 0);
+
+        function<int(int)> find = [&](int x){
+            if(parent[x] != x) parent[x] = find(parent[x]);
+            return parent[x];
+        };
+
+        function<bool(int,int)> unite = [&](int x,int y){
+            x = find(x);
+            y = find(y);
+            if(x == y) return false;
+            if(size[x] < size[y]) swap(x,y);
+            parent[y] = x;
+            size[x] += size[y];
+            return true;
+        };
+
+        int dr[] = {0,1,0,-1};
+        int dc[] = {-1,0,1,0};
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j]){
+                    int id = i * n + j;
+                    for(int k = 0; k < 4; k++){
+                        int nr = i + dr[k];
+                        int nc = j + dc[k];
+                        if(nr >= 0 && nr < n && nc >= 0 && nc < n && grid[nr][nc]){
+                            unite(id, nr * n + nc);
+                        }
+                    }
+                }
+            }
+        }
+
+        int ans = 0;
+        for(int i = 0; i < sz; i++){
+            if(parent[i] == i) ans = max(ans, size[i]);
+        }
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] == 0){
+                    unordered_set<int> seen;
+                    int cur = 1;
+                    for(int k = 0; k < 4; k++){
+                        int nr = i + dr[k];
+                        int nc = j + dc[k];
+                        if(nr >= 0 && nr < n && nc >= 0 && nc < n && grid[nr][nc]){
+                            int p = find(nr * n + nc);
+                            if(seen.insert(p).second) cur += size[p];
+                        }
+                    }
+                    ans = max(ans, cur);
+                }
+            }
+        }return ans;
+    }
+};
+
+
+class Solution {
+public:
+    int swimInWater(vector<vector<int>>& grid) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+
+        int n = grid.size();
+        vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
+        priority_queue<pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<>> pq;
+
+        dist[0][0] = grid[0][0];
+        pq.push({grid[0][0], {0,0}});
+
+        int dr[] = {0,1,0,-1};
+        int dc[] = {-1,0,1,0};
+
+        while(!pq.empty()){
+            auto [t, cell] = pq.top(); pq.pop();
+            int r = cell.first, c = cell.second;
+            if(r == n-1 && c == n-1) return t;
+            if(t > dist[r][c]) continue;
+
+            for(int k = 0; k < 4; k++){
+                int nr = r + dr[k];
+                int nc = c + dc[k];
+                if(nr >= 0 && nr < n && nc >= 0 && nc < n){
+                    int nt = max(t, grid[nr][nc]);
+                    if(nt < dist[nr][nc]){
+                        dist[nr][nc] = nt;
+                        pq.push({nt, {nr,nc}});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
