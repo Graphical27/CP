@@ -651,3 +651,38 @@ public:
         return -1;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<int> adj[n];
+        for(auto it:connections){
+            adj[it[0]].push_back({it[1]});
+            adj[it[1]].push_back({it[0]});
+        }
+        vector<int> vis(n,0);
+        int tin[n], low[n];
+        vector<vector<int>> brides;
+        int time = 0;
+        function<void(int,int)> dfs = [&](int parent, int x){
+            vis[x] = 1;
+            tin[x] = low[x] = time;
+            time++;
+            for(auto i:adj[x]){
+                if(i == parent) continue;
+                if(!vis[i]){
+                    dfs(x,i);
+                    low[x] = min(low[x],low[i]);
+                    if(low[i] > tin[x]){
+                        brides.push_back({i,x});
+                    }
+                }else{
+                    low[x] = min(low[x],low[i]);
+                }
+            }
+        };
+        dfs(0,-1);
+        return brides;
+    }
+};
