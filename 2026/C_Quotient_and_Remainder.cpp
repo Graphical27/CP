@@ -30,7 +30,17 @@ int LCsubstring(string a, string b){int n = a.size(), m = b.size(), res = 0;vect
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(){
-    // W.I.P;
+    int n, m; cin >> n >> m;
+    vector<int> a(n), b(n);
+    for(auto& x : a) cin >> x;
+    for(auto& x : b) cin >> x;
+    sort(a.rbegin(), a.rend());
+    sort(b.rbegin(), b.rend());
+    int p = n - 1;
+    for(auto& x:a){
+        int t = (m - x) / (x + 1);
+        if(p >= 0 && b[p] <= t) p--;
+    }cout << n - 1 - p << ln;
 }
 
 int32_t main(){
