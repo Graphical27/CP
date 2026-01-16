@@ -1,4 +1,5 @@
 {
-    "zencoder.repoInfo.lastCheckTime": 1751697759852,
-    "zencoder.repoInfo.currentWarningState": true
+  "zencoder.repoInfo.lastCheckTime": 1751697759852,
+  "zencoder.repoInfo.currentWarningState": true,
+  "C_Cpp.errorSquiggles": "disabled"
 }
