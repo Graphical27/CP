@@ -47,21 +47,21 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 void solve() {
     int N; cin >> N;
     vector<int> A(N);
-    for(auto x : A) cin >> x;
+    for(int& x : A) cin >> x;
     map<int, int> MP;
     for(auto& x : A) MP[x]++;
     if(MP[0] == 0){
-        cout << "No" << ln;
+        cout << "NO" << ln;
         return;
     }
     if(MP[0] == 1){
-        cout << "Yes" << ln;
+        cout << "YES" << ln;
         return;
     }
     if(MP[1] == 0){
-        cout << "No" << ln;
+        cout << "NO" << ln;
         return;
-    }cout << "Yes" << ln;
+    }cout << "YES" << ln;
 }
 
 int32_t main() {
