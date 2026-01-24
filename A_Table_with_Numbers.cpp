@@ -29,6 +29,22 @@ int gcd(int a, int b) {
     return gcd(b % a, a);
 }
 int lcm(int a, int b) { return (a * b) / gcd(a, b); }
+template<class T>
+bool chmax(T& a, const T& b) {
+    if(a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+template<class T>
+bool chmin(T& a, const T& b) {
+    if(b < a) {
+        a = b;
+        return true;
+    }
+    return false;
+}
 int LCsubstring(string a, string b) {
     int n = a.size(), m = b.size(), res = 0;
     vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
@@ -44,30 +60,31 @@ int LCsubstring(string a, string b) {
 }
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
-class Solution {
-  public:
-    int maximizeSquareHoleArea(int n, int m, vector<int>& hBars, vector<int>& vBars) {
-        function<int(vector<int>)> max_seq = [&](vector<int> v) {
-            sort(all(v));
-            int maxi = 1;
-            int current = 1;
-            int prev = v[0];
-            for(int i = 1; i < v.size(); i++) {
-                if(prev + 1 == v[i]) {
-                    current++;
-                    prev = v[i];
-                    maxi = max(maxi, current);
-                } else {
-                    maxi = max(maxi, current);
-                    current = 1;
-                    prev = v[i];
-                }
-            }
-            return maxi;
-        };
-
-        int lh_max = max_seq(hBars) + 1;
-        int lv_max = max_seq(vBars) + 1;
-        return lh_max + lv_max;
+void solve() {
+    int N, A, B;
+    cin >> N >> A >> B;
+    if(A > B) swap(A, B);
+    vector<int> v(N);
+    for(int i = 0; i < N; i++) {
+        cin >> v[i];
     }
-};
+    sort(all(v));
+    int ans = 0;
+    for(int k = 1; k + k <= N; k++) {
+        if(v[k - 1] <= A && v[k + k - 1] <= B) chmax(ans, k);
+    }
+    cout << ans << ln;
+}
+
+int32_t main() {
+    Fast_IO;
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        //        auto begin = chrono::high_resolution_clock::now();
+        solve();
+        //        auto end = chrono::high_resolution_clock::now();
+        //        auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
+        //        cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds." << ln;
+    }
+}
