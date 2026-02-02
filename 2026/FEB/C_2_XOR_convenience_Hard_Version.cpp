@@ -61,7 +61,7 @@ void solve() {
     for(int i = 0; i < N; ++i) {
         cout << A[i] << " ";
     }
-    cout << '\n';
+    cout << ln;
 }
 
 int32_t main() {
