@@ -18,7 +18,7 @@ Could you shine it down here for her?
 using namespace std;
 #define int long long
 const int MOD = 1e9 + 7;
-#define ln     "\n"
+#define ln     "\n";
 #define all(v) v.begin(), v.end()
 #define eb     emplace_back
 #define Fast_IO                       \
@@ -44,20 +44,20 @@ int LCsubstring(string a, string b) {
     return res;
 }
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
+const int N = 2e5 + 5;
+vector<int> e[N], ans[2];
+int vis[N], d[N];
+
+void dfs(int u, int z) {
+    vis[u] = 1;
+    ans[z].eb(u);
+    for(auto v : e[u])
+        if(!vis[v])
+            dfs(v, 1 - z);
+}
 
 void solve() {
-    int n, m;
-    cin >> n >> m;
-    const int N = 2e5 + 5;
-    vector<int> e[N], ans[2];
-    int vis[N], d[N];
-    function<void(int, int)> dfs = [&](int u, int z) {
-        vis[u] = 1;
-        ans[z].eb(u);
-        for(auto v : e[u])
-            if(!vis[v])
-                dfs(v, 1 - z);
-    };
+    int n, m; cin >> n >> m;
     ans[0].clear();
     ans[1].clear();
     for(int i = 1; i <= n; ++i) {
@@ -72,7 +72,7 @@ void solve() {
     }
     dfs(1, 1);
     int fk = ans[0].size() > ans[1].size();
-    cout << ans[fk].size() << endl;
+    cout << ans[fk].size() << ln;
     for(auto i : ans[fk])
         cout << i << ' ';
     cout << ln;
