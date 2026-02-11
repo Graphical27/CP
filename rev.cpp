@@ -243,3 +243,174 @@ class Solution {
         return num;
     }
 };
+
+class Solution {
+  public:
+    int lengthOfLastWord(string s) {
+        istringstream stream(s);
+        string word;
+        int k = 0;
+        while(stream >> word) {
+            k = word.size();
+        }
+        return k;
+    }
+};
+
+class Solution {
+  public:
+    bool isMonotonic(vector<int>& nums) {
+        return is_sorted(nums.begin(), nums.end()) || is_sorted(nums.rbegin(), nums.rend());
+    }
+};
+
+class Solution {
+  public:
+    int missingNumber(vector<int>& nums) {
+        unordered_map<int, int> mp;
+        for(int i = 0; i < nums.size(); i++) {
+            mp[nums[i]] = 1;
+        }
+        int i = 0;
+        while(i < nums.size()) {
+            if(mp[i] != 1) {
+                return i;
+            }
+            i++;
+        }
+        return nums.size();
+    }
+};
+
+class Solution {
+  public:
+    bool isValid(string s) {
+        stack<char> stk;
+        for(int i = 0; i < s.size(); i++) {
+            char c = s[i];
+            if(c == '(' || c == '{' || c == '[') {
+                stk.push(c);
+            } else {
+                if(stk.empty()) return false;
+                char top = stk.top();
+                if(c == ')' && top == '(' || c == '}' && top == '{' || c == ']' && top == '[') {
+                    stk.pop();
+                } else
+                    return false;
+            }
+        }
+        return stk.empty();
+    }
+};
+
+class Solution {
+  public:
+    bool rotateString(string s, string goal) {
+        if(s.size() != goal.size()) return false;
+        string doubled = s + s;
+        return doubled.find(goal) != string::npos;
+    }
+};
+
+class Solution {
+  public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int ans = 0;
+        int maxi = INT_MIN;
+        for(int i : nums) {
+            ans = i ? ans + 1 : 0;
+            maxi = max(maxi, ans);
+        }
+        return maxi;
+    }
+};
+
+class Solution {
+  public:
+    int minimumCost(vector<int>& nums) {
+        sort(nums.begin() + 1, nums.end());
+        return nums[0] + nums[1] + nums[2];
+    }
+};
+
+class Solution {
+  public:
+    bool isPalindrome(const string& s, int l, int r) {
+        while(l < r) {
+            if(s[l] != s[r]) return false;
+            l++;
+            r--;
+        }
+        return true;
+    }
+    bool validPalindrome(string s) {
+        int n = s.size();
+        int l = 0, r = n - 1;
+        while(l < r) {
+            if(s[l] != s[r]) {
+                return isPalindrome(s, l + 1, r) || isPalindrome(s, l, r - 1);
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+};
+
+class Solution {
+  public:
+    vector<int> getConcatenation(vector<int>& nums) {
+        vector<int> ans(nums);
+        ans.insert(ans.end(), nums.begin(), nums.end());
+        return ans;
+    }
+};
+
+class Solution {
+  public:
+    bool isBalanced(TreeNode* root) {
+        function<int(TreeNode*)> height = [&](TreeNode* node) -> int {
+            if(!node) return 0;
+            int lh = height(node->left);
+            if(lh == -1) return -1;
+            int rh = height(node->right);
+            if(rh == -1) return -1;
+            if(abs(lh - rh) > 1) return -1;
+            return max(lh, rh) + 1;
+        };
+        return height(root) != -1;
+    }
+};
+
+class Solution {
+  public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> res(numRows);
+        for(int i = 0; i < numRows; i++) {
+            res[i].resize(i + 1);
+            res[i][0] = res[i][i] = 1;
+            for(int j = 1; j < i; j++) {
+                res[i][j] = res[i - 1][j - 1] + res[i - 1][j];
+            }
+        }
+        return res;
+    }
+};
+
+// Easy Done
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> mp;
+        int ans = 0, left = 0;
+        for(int right = 0; right < s.size(); right++) {
+            if(mp.count(s[right]) && mp[s[right]] >= left) {
+                left = mp[s[right]] + 1;
+            }
+            mp[s[right]] = right;
+            ans = max(ans, right - left + 1);
+        }
+        return ans;
+    }
+};

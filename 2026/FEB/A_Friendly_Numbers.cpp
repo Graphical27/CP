@@ -44,20 +44,22 @@ int LCsubstring(string a, string b) {
 }
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
+int sum_digits(int n) {
+    int sum = 0;
+    while(n > 0) {
+        sum += n % 10;
+        n /= 10;
+    }return sum;
+}
+
 void solve() {
-    int n, x, y; cin >> n >> x >> y;
-    vector<int> A(n);
-    int total = 0;
-    for(int i = 0; i < n; i++) {
-        cin >> A[i];
-        total += (A[i] / x);
-    }
-    int ans = 0; 
-    for(int i = 0; i < n; i++){
-        int curr = total - (A[i] / x);
-        int curr_total = A[i] + curr * y;
-        ans = max(ans, curr_total);
-    } cout << ans << ln;
+    int x; cin >> x;
+    int ans = 0;
+    for(int y = x; y <= x + 200; y++) {
+        if(y - sum_digits(y) == x) {
+            ans++;
+        }
+    }cout << ans << ln;
 }
 
 int32_t main() {

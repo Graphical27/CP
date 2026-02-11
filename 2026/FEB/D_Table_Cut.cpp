@@ -45,19 +45,46 @@ int LCsubstring(string a, string b) {
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve() {
-    int n, x, y; cin >> n >> x >> y;
-    vector<int> A(n);
+    int n, m; cin >> n >> m;
+    vector<vector<int>> a(n, vector<int>(m + 1, 0));
     int total = 0;
-    for(int i = 0; i < n; i++) {
-        cin >> A[i];
-        total += (A[i] / x);
-    }
-    int ans = 0; 
-    for(int i = 0; i < n; i++){
-        int curr = total - (A[i] / x);
-        int curr_total = A[i] + curr * y;
-        ans = max(ans, curr_total);
-    } cout << ans << ln;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < m; j++) {
+            char c;
+            cin >> c;
+            a[i][j] = c - '0';
+            total += a[i][j];
+        }
+
+    int need = total / 2;
+    int cur = 0;
+    string path;
+    int i = 0;
+    int c = m;
+    int j = m;
+    for(i = 0; i < n; i++) {
+        j = m - 1;
+        bool f = false;
+        for(; j >= -1; j--) {
+            if(a[i][j + 1] == 1 && cur < need) {
+                cur++;
+            }
+            if(cur == need) {
+                cur++;
+                f = true;
+                break;
+            }
+        }
+        for(; j >= 0; j--) {
+            path += 'R';
+            c--;
+        }
+        path += 'D';
+        if(f) break;
+        }
+    for(; c > 0; c--) path += 'R';
+    for(; i + 1 < n; i++) path += 'D';
+    cout << 1LL * need * (total - need) << ln cout << path << ln;
 }
 
 int32_t main() {

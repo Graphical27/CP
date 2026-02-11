@@ -45,19 +45,20 @@ int LCsubstring(string a, string b) {
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve() {
-    int n, x, y; cin >> n >> x >> y;
-    vector<int> A(n);
-    int total = 0;
+    int n; cin >> n;
+    vector<int> pos(n + 1);
     for(int i = 0; i < n; i++) {
-        cin >> A[i];
-        total += (A[i] / x);
+        int x; cin >> x;
+        pos[x] = i;
     }
-    int ans = 0; 
-    for(int i = 0; i < n; i++){
-        int curr = total - (A[i] / x);
-        int curr_total = A[i] + curr * y;
-        ans = max(ans, curr_total);
-    } cout << ans << ln;
+    vector<int> a(n);
+    for(int i = 0; i < n; i++) cin >> a[i];
+    for(int i = 0; i + 1 < n; i++) {
+        if(pos[a[i]] > pos[a[i + 1]]) {
+            cout << "NO\n";
+            return;
+        }
+    }cout << "YES" << ln;
 }
 
 int32_t main() {
