@@ -400,7 +400,7 @@ class Solution {
 // Easy Done
 
 class Solution {
-public:
+  public:
     int lengthOfLongestSubstring(string s) {
         unordered_map<char, int> mp;
         int ans = 0, left = 0;
@@ -412,5 +412,109 @@ public:
             ans = max(ans, right - left + 1);
         }
         return ans;
+    }
+};
+
+class LRUCache {
+  private:
+    int capacity;
+    unordered_map<int, int> cache;
+    deque<int> order;
+
+  public:
+    LRUCache(int capacity) : capacity(capacity) {}
+    int get(int key) {
+        if(cache.find(key) == cache.end()) {
+            return -1;
+        }
+        auto it = find(order.begin(), order.end(), key);
+        order.erase(it);
+        order.push_back(key);
+        return cache[key];
+    }
+
+    void put(int key, int value) {
+        if(cache.find(key) != cache.end()) {
+            auto it = find(order.begin(), order.end(), key);
+            order.erase(it);
+        } else if(cache.size() == capacity) {
+            int lru_key = order.front();
+            order.pop_front();
+            cache.erase(lru_key);
+        }
+        cache[key] = value;
+        order.push_back(key);
+    }
+};
+
+class Solution {
+  public:
+    int longestConsecutive(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        unordered_set<int> numSet(nums.begin(), nums.end());
+        int maxi = 0;
+        for(int num : numSet) {
+            if(numSet.find(num - 1) == numSet.end()) {
+                int current = num;
+                int count = 1;
+                while(numSet.find(current + 1) != numSet.end()) {
+                    current++;
+                    count++;
+                }
+                maxi = max(maxi, count);
+            }
+        }
+        return maxi;
+    }
+};
+
+class Solution {
+  public:
+    vector<int> lexSmallestNegatedPerm(int n, long long target) {
+        long long sum = (long long)n * (n + 1) / 2;
+        if(sum < target || target < -sum || (sum - target) % 2 != 0) {
+            return {};
+        }
+        long long K = (sum - target) / 2;
+        vector<bool> negated(n + 1, false);
+        for(int i = n; i >= 1; i--) {
+            if(K >= i) {
+                negated[i] = true;
+                K -= i;
+            }
+        }
+        vector<int> ans;
+        ans.reserve(n);
+        for(int i = n; i >= 1; i--) {
+            if(negated[i]) {
+                ans.push_back(-i);
+            }
+        }
+        for(int i = 1; i <= n; i++) {
+            if(!negated[i]) {
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};
+
+
+class Solution {
+  public:
+    int subarraySum(vector<int>& nums, int k) {
+        int n = nums.size();
+        unordered_map<int, int> mp;
+        int pf = 0;
+        int cnt = 0;
+        mp[0] = 1;
+        for(int i = 0; i < n; i++) {
+            pf += nums[i];
+            if(mp.count(pf - k)) {
+                cnt += mp[pf - k];
+            }
+            mp[pf]++;
+        }
+        return cnt;
     }
 };
