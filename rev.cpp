@@ -518,3 +518,50 @@ class Solution {
         return cnt;
     }
 };
+
+
+class Solution {
+public:
+    int minEatingSpeed(vector<int>& piles, int h) {
+        int low = 1;
+        int high = *max_element(piles.begin(), piles.end());
+        int ans = high;
+        while(low <= high){
+            int mid = low + (high - low) / 2;
+            long long cnt = 0;
+            for(int i = 0; i < piles.size(); i++){
+                cnt += (piles[i] + mid - 1) / mid;
+            }
+            if(cnt > h){
+                low = mid + 1;
+            } else {
+                ans = mid;
+                high = mid - 1;
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    int longestOnes(vector<int>& nums, int k) {
+      vector<int> pf(n, 0);
+      vector<int> sf(n + 1, 0);
+      int cnt = 0;
+      pf[0] = nums[i];
+      for(int i = 0; i < n; i++){
+        cnt += v[i];
+        pf[i] = cnt;
+      }
+      for(int i = n - 1; i >= 0; i++){
+        cnt += v[i];
+        pf[i] = cnt;
+      }
+      for(int i = 0; i < n; i++){
+        if(!nums[i]){
+          for()
+        }
+      }
+    }
+};

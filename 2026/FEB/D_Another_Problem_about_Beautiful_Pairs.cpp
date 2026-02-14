@@ -1,4 +1,3 @@
-
 /*⠀⠀⠀⠀
  Moon, tell me if I could
 Send up my heart to you?
@@ -45,17 +44,35 @@ int LCsubstring(string a, string b) {
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve() {
-    int n; cin >> n;
+    int n;
+    cin >> n;
     vector<int> a(n);
-    for(int& x : a) cin >> x;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    int SQ = 500;
     int ans = 0;
-    for(int j = 0; j < n; j++) {
-        for(int k = 1;; k++) {
-            int i = j - a[j] * k;
-            if(i < 0) break;
-            if(a[i] == k) ++ans;
+    for(int i = 0; i < n; i++) {
+        if(a[i] >= SQ) {
+            for(int j = 1; i + a[i] * j < n; j++) {
+                if(a[i + a[i] * j] == j) {
+                    ans++;
+                }
+            }
+            for(int j = 1; i - a[i] * j >= 0; j++) {
+                if(a[i - a[i] * j] == j) {
+                    ans++;
+                }
+            }
+        } else {
+            for(int j = 1; i + a[i] * j < n && j < SQ; j++) {
+                if(a[i + a[i] * j] == j) {
+                    ans++;
+                }
+            }
         }
-    }cout << ans << ln;
+    }
+    cout << ans << ln;
 }
 
 int32_t main() {
