@@ -470,12 +470,12 @@ class Solution {
 
 class Solution {
   public:
-    vector<int> lexSmallestNegatedPerm(int n, long long target) {
-        long long sum = (long long)n * (n + 1) / 2;
+    vector<int> lexSmallestNegatedPerm(int n, int target) {
+        int sum = (int)n * (n + 1) / 2;
         if(sum < target || target < -sum || (sum - target) % 2 != 0) {
             return {};
         }
-        long long K = (sum - target) / 2;
+        int K = (sum - target) / 2;
         vector<bool> negated(n + 1, false);
         for(int i = n; i >= 1; i--) {
             if(K >= i) {
@@ -499,7 +499,6 @@ class Solution {
     }
 };
 
-
 class Solution {
   public:
     int subarraySum(vector<int>& nums, int k) {
@@ -519,20 +518,19 @@ class Solution {
     }
 };
 
-
 class Solution {
-public:
+  public:
     int minEatingSpeed(vector<int>& piles, int h) {
         int low = 1;
         int high = *max_element(piles.begin(), piles.end());
         int ans = high;
-        while(low <= high){
+        while(low <= high) {
             int mid = low + (high - low) / 2;
-            long long cnt = 0;
-            for(int i = 0; i < piles.size(); i++){
+            int cnt = 0;
+            for(int i = 0; i < piles.size(); i++) {
                 cnt += (piles[i] + mid - 1) / mid;
             }
-            if(cnt > h){
+            if(cnt > h) {
                 low = mid + 1;
             } else {
                 ans = mid;
@@ -544,24 +542,84 @@ public:
 };
 
 class Solution {
-public:
+  public:
     int longestOnes(vector<int>& nums, int k) {
-      vector<int> pf(n, 0);
-      vector<int> sf(n + 1, 0);
-      int cnt = 0;
-      pf[0] = nums[i];
-      for(int i = 0; i < n; i++){
-        cnt += v[i];
-        pf[i] = cnt;
-      }
-      for(int i = n - 1; i >= 0; i++){
-        cnt += v[i];
-        pf[i] = cnt;
-      }
-      for(int i = 0; i < n; i++){
-        if(!nums[i]){
-          for()
+        int n = nums.size();
+        int l = 0;
+        int zero_count = 0;
+        int maxi = 0;
+        for(int r = 0; r < n; r++) {
+            if(nums[r] == 0) zero_count++;
+            while(zero_count > k) {
+                if(nums[l] == 0) zero_count--;
+                l++;
+            }
+            maxi = max(maxi, r - l + 1);
         }
-      }
+        return maxi;
+    }
+};
+
+class Solution {
+  public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        queue<pair<string, pair<int, int>>> q;
+        q.push({"", {0, 0}});
+
+        while(!q.empty()) {
+            auto [s, counts] = q.front();
+            q.pop();
+            auto [open, close] = counts;
+
+            if(s.size() == 2 * n) {
+                ans.push_back(s);
+                continue;
+            }
+
+            if(open < n) {
+                q.push({s + "(", {open + 1, close}});
+            }
+            if(close < open) {
+                q.push({s + ")", {open, close + 1}});
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& inventory, int orders) {
+        const int MOD = 1e9 + 7;
+        sort(inventory.rbegin(), inventory.rend());
+        inventory.push_back(0);
+        int ans = 0;
+        int n = inventory.size();
+        int width = 1;
+        for(int i = 0; i < n - 1 && orders > 0; i++) {
+            int curr = inventory[i];
+            int next = inventory[i + 1];
+            if(curr > next) {
+                int height = curr - next;
+                int total = width * height;
+                if(orders >= total) {
+                    int sum = width * ((curr * (curr + 1LL) / 2) - (next * (next + 1LL) / 2));
+                    ans = (ans + sum) % MOD;
+                    orders -= total;
+                } else {
+                    int full = orders / width;
+                    int rem = orders % width;
+                    int low = curr - full;
+                    int sum = width * ((curr * (curr + 1LL) / 2) - (low * (low + 1LL) / 2));
+                    ans = (ans + sum) % MOD;
+                    ans = (ans + rem * low) % MOD;
+                    return ans;
+                }
+            }width++;
+        }return ans;
     }
 };
