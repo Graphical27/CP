@@ -22,7 +22,7 @@ const int INF = 1e15;
 const int N = 1e6;
 #define ln     "\n";
 #define all(v) v.begin(), v.end()
-#define pb push_back
+#define pb     push_back
 #define Fast_IO                       \
     ios_base::sync_with_stdio(false); \
     cin.tie(NULL);                    \
@@ -65,14 +65,15 @@ void dfs(int node, int par, int dep) {
             dp[node] += dp[j];
         }
     }
+
     if(adj[node].size() <= 1) dp[node] = 0;
 }
 
 void dfs2(int node, int par, int val) {
-    ans[node] = val + dp[node] + depth[node];
+    ans[node] = (val + dp[node] + depth[node]) % MOD;
     for(auto j : adj[node]) {
         if(j != par) {
-            dfs2(j, node, val + dp[node]);
+            dfs2(j, node, (val + dp[node]) % MOD);
         }
     }
 }

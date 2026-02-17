@@ -589,10 +589,8 @@ class Solution {
     }
 };
 
-
-
 class Solution {
-public:
+  public:
     int maxProfit(vector<int>& inventory, int orders) {
         const int MOD = 1e9 + 7;
         sort(inventory.rbegin(), inventory.rend());
@@ -619,16 +617,79 @@ public:
                     ans = (ans + rem * low) % MOD;
                     return ans;
                 }
-            }width++;
-        }return ans;
+            }
+            width++;
+        }
+        return ans;
     }
 };
 
+class Solution {
+  public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if(intervals.empty()) return {};
+        sort(intervals.begin(), intervals.end());
+        vector<vector<int>> ans;
+        ans.push_back(intervals[0]);
+        for(int i = 1; i < intervals.size(); i++) {
+            vector<int>& last = ans.back();
+            int currStart = intervals[i][0];
+            int currEnd = intervals[i][1];
+            if(currStart <= last[1]) {
+                last[1] = max(last[1], currEnd);
+            } else {
+                ans.push_back(intervals[i]);
+            }
+        }
+        return ans;
+    }
+};
 
+class Solution {
+  public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        vector<int> ans;
+        for(int asteroid : asteroids) {
+            bool alive = true;
+            while(alive && asteroid < 0 && !ans.empty() && ans.back() > 0) {
+                int right = ans.back();
+                if(right < -asteroid) {
+                    ans.pop_back();
+                } else if(right == -asteroid) {
+                    ans.pop_back();
+                    alive = false;
+                } else {
+                    alive = false;
+                }
+            }
+            if(alive) ans.push_back(asteroid);
+        }
+        return ans;
+    }
+};
+
+class Solution {
+  public:
+    string reverseWords(string s) {
+        string word;
+        string ans = "";
+        stringstream stream(s);
+        vector<string> v;
+        while(stream >> word) {
+            v.push_back(word);
+        }
+        int n = v.size();
+        for(int i = 0; i < v.size(); i++) {
+            if(i > 0) ans += " ";
+            ans += v[n - i - 1];
+        }
+        return ans;
+    }
+};
 
 class Solution {
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-              
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        
     }
 };
