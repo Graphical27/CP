@@ -697,9 +697,96 @@ class Solution {
         while(row < m && col >= 0) {
             if(matrix[row][col] == target) return true;
             if(matrix[row][col] > target) col--;
-            else row++;
+            else
+                row++;
         }
         return false;
     }
 };
 
+class Solution {
+  public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int> pq;
+        for(auto i : nums) pq.push(i);
+        int ans = 0;
+        while(k--) {
+            ans = pq.top();
+            pq.pop();
+        }
+        return ans;
+    }
+};
+
+class Solution {
+  public:
+    string helper(int n, string s) {
+        if(n == 1) return s;
+        string temp = "";
+        int i = 0;
+        while(i < (int)s.size()) {
+            char curr = s[i];
+            int count = 0;
+            while(i < (int)s.size() && s[i] == curr) {
+                count++;
+                i++;
+            }
+            temp += to_string(count);
+            temp += curr;
+        }
+        return helper(n - 1, temp);
+    }
+    string countAndSay(int n) {
+        return helper(n, "1");
+    }
+};
+
+class Solution {
+  public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        unordered_map<int, int> mp;
+        for(int i = 0; i < matrix.size(); i++) {
+            for(int j = 0; j < matrix[0].size(); j++) {
+                if(matrix[i][j] == 0) { mp[i * 1000 + j]++; }
+            }
+        }
+        for(auto& it : mp) {
+            for(int i = 0; i < matrix.size(); i++) {
+                matrix[i][it.first % 1000] = 0;
+            }
+            for(int i = 0; i < matrix[0].size(); i++) {
+                matrix[it.first / 1000][i] = 0;
+            }
+        }
+    }
+};
+
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int n = matrix[0].size();
+        int m = matrix.size();
+        int prev = 0;
+        for(int i = 1; i < m; i++){
+            if(matrix[i][0] > target){
+                break;
+            }prev = i;
+        }
+        int l = 0, high = n - 1;
+        while(l <= h){
+            int mid = l + (h - l) / 2;
+            if(matrix[prev][mid] == target) return true;
+            if(matrix[prev][mid] > target) h = mid - 1;
+            else l = mid + 1;
+        }return false;
+    }
+};
+
+
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        
+    }
+};

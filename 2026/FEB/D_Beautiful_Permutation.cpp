@@ -44,41 +44,28 @@ int LCsubstring(string a, string b) {
 }
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
-int firstSetBit(int num) {
-    if(num == 0) return -1;
-    for(int j = 60; j >= 0; j--) {
-        if((1LL << j) & num) {
-            return j;
-        }
-    }
-    return 0;
+int query(int t, int l, int r) {
+    cout << t << " " << l + 1 << " " << r << ln;
+    int ans; cin >> ans;
+    return ans;
 }
 
 void solve() {
-    int a, b;
-    cin >> a >> b;
-    vector<int> ans;
-    int x = firstSetBit(a);
-    int y = firstSetBit(b);
-    if(y > x) {
-        cout << -1 << "\n";
-        return;
-    }
-    for(int j = 0; j < x; j++) {
-        if(!((1LL << j) & a) && ((1LL << j) & b)) {
-            ans.push_back((1LL << j));
-        } else if(((1LL << j) & a) && !((1LL << j) & b)) {
-            ans.push_back((1LL << j));
+    int n; cin >> n;
+    int len = query(2, 0, n) - query(1, 0, n);
+    int lo = len, hi = n;
+    while(lo < hi) {
+        int x = (lo + hi) / 2;
+        if(query(2, 0, x) - query(1, 0, x) == len) {
+            hi = x;
+        } else {
+            lo = x + 1;
         }
-    }
-    if(x != y) ans.push_back((1LL << x));
-    cout << ans.size() << "\n";
-    for(auto j : ans) cout << j << " ";
-    cout << "\n";
+    }cout << "! " << lo - len + 1 << " " << lo << ln;
 }
 
 int32_t main() {
-    Fast_IO;
+    // Fast_IO;
     int t = 1;
     cin >> t;
     while(t--) {
