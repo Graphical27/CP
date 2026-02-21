@@ -761,32 +761,49 @@ class Solution {
     }
 };
 
-
 class Solution {
-public:
+  public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
         int n = matrix[0].size();
         int m = matrix.size();
         int prev = 0;
-        for(int i = 1; i < m; i++){
-            if(matrix[i][0] > target){
+        for(int i = 1; i < m; i++) {
+            if(matrix[i][0] > target) {
                 break;
-            }prev = i;
+            }
+            prev = i;
         }
         int l = 0, high = n - 1;
-        while(l <= h){
+        while(l <= h) {
             int mid = l + (h - l) / 2;
             if(matrix[prev][mid] == target) return true;
             if(matrix[prev][mid] > target) h = mid - 1;
-            else l = mid + 1;
-        }return false;
+            else
+                l = mid + 1;
+        }
+        return false;
     }
 };
 
-
 class Solution {
-public:
-    vector<vector<int>> subsets(vector<int>& nums) {
-        
+  public:
+    vector<int> subset;
+    vector<vector<int>> ans;
+    vector<int> nums; 
+    void dfs(int i) {
+        if(i >= nums.size()) {
+            ans.push_back(subset);
+            return;
+        }
+        subset.push_back(nums[i]);
+        dfs(i + 1);
+
+        subset.pop_back();
+        dfs(i + 1);
+    }
+    vector<vector<int>> subsets(vector<int>& input_nums) {
+        nums = input_nums
+        dfs(0);
+        return ans;
     }
 };
