@@ -789,7 +789,7 @@ class Solution {
   public:
     vector<int> subset;
     vector<vector<int>> ans;
-    vector<int> nums; 
+    vector<int> nums;
     void dfs(int i) {
         if(i >= nums.size()) {
             ans.push_back(subset);
@@ -803,7 +803,51 @@ class Solution {
     }
     vector<vector<int>> subsets(vector<int>& input_nums) {
         nums = input_nums
-        dfs(0);
+            dfs(0);
         return ans;
     }
 };
+
+class Solution {
+  public:
+    double separateSquares(vector<vector<int>>& squares) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+
+        double totalArea = 0;
+        double low = 1e18, high = -1e18;
+
+        for(auto& sq : squares) {
+            double y = sq[1];
+            double l = sq[2];
+            totalArea += l * l;
+            low = min(low, y);
+            high = max(high, y + l);
+        }
+
+        double target = totalArea / 2.0;
+
+        for(int iter = 0; iter < 100; iter++) {
+            double mid = (low + high) / 2.0;
+            double areaBelow = 0;
+
+            for(auto& sq : squares) {
+                double y = sq[1];
+                double l = sq[2];
+                double top = y + l;
+
+                if(mid <= y) continue;
+                else if(mid >= top)
+                    areaBelow += l * l;
+                else
+                    areaBelow += l * (mid - y);
+            }
+
+            if(areaBelow < target) low = mid;
+            else
+                high = mid;
+        }
+
+        return low;
+    }
+};  
