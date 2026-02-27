@@ -45,37 +45,32 @@ int LCsubstring(string a, string b) {
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve() {
-    int n;
-    string s; cin >> n >> s;
-    for(int mask = 0; mask < (1 << n); mask++) {
-        string temp = s;
-        vector<int> ops;
+    int n; cin >> n;
+    string s; cin >> s;
+    int z = 0, o = 0;
+    for(int i = 0; i < n; i++) {
+        if(s[i] == '1') o++;
+        else z++;
+    }
+    if(o % 2 == 0) {
+        cout << o << ln;
         for(int i = 0; i < n; i++) {
-            if(mask & (1 << i)) {
-                ops.push_back(i + 1);
-                for(int j = 0; j < n; j++) {
-                    if(i != j) {
-                        temp[j] = (temp[j] == '0') ? '1' : '0';
-                    }
-                }
+            if(s[i] == '1') {
+                cout << i + 1 << " ";
             }
         }
-        bool all_zero = true;
-        for(char c : temp) {
-            if(c != '0') {
-                all_zero = false;
-                break;
+        cout << ln;
+    } else if(z % 2 == 1) {
+        cout << z << ln;
+        for(int i = 0; i < n; i++) {
+            if(s[i] == '0') {
+                cout << i + 1 << " ";
             }
         }
-        if(all_zero) {
-            cout << ops.size() << ln;
-            for(int idx : ops) {
-                cout << idx << " ";
-            }
-            if(ops.size() > 0) cout << ln;
-            return;
-        }
-    }cout << "-1" << ln;
+        cout << ln;
+    } else {
+        cout << "-1" << ln;
+    }
 }
 
 int32_t main() {

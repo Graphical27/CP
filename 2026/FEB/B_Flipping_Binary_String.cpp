@@ -45,11 +45,37 @@ int LCsubstring(string a, string b) {
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve() {
-    int a, b, n; cin >> a >> b >> n;
-    if(b == a)
-        cout << 1 << ln
-    else
-        cout << (1 + (a < b * n)) << ln
+    int n;
+    string s; cin >> n >> s;
+    for(int mask = 0; mask < (1 << n); mask++) {
+        string temp = s;
+        vector<int> ops;
+        for(int i = 0; i < n; i++) {
+            if(mask & (1 << i)) {
+                ops.push_back(i + 1);
+                for(int j = 0; j < n; j++) {
+                    if(i != j) {
+                        temp[j] = (temp[j] == '0') ? '1' : '0';
+                    }
+                }
+            }
+        }
+        bool all_zero = true;
+        for(char c : temp) {
+            if(c != '0') {
+                all_zero = false;
+                break;
+            }
+        }
+        if(all_zero) {
+            cout << ops.size() << ln;
+            for(int idx : ops) {
+                cout << idx << " ";
+            }
+            if(ops.size() > 0) cout << ln;
+            return;
+        }
+    }cout << "-1" << ln;
 }
 
 int32_t main() {
