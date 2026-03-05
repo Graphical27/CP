@@ -62,7 +62,7 @@ void solve() {
                 all[j] += d;
                 found = true;
                 break;
-            }
+            }   
         }
         if(!found) {
             cout << -1 << ln;
